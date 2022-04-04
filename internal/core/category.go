@@ -1,4 +1,4 @@
-package models
+package core
 
 type Category struct {
 	ID     uint64

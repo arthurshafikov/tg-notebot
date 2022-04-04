@@ -1,4 +1,4 @@
-package models
+package core
 
 type Note struct {
 	ID         uint64

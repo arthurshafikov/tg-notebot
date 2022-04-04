@@ -1,4 +1,4 @@
-package models
+package core
 
 type User struct {
 	ID         uint64
