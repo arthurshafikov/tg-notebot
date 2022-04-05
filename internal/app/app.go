@@ -11,7 +11,7 @@ import (
 func Run() {
 	ctx := context.Background()
 
-	handler := handler.NewHandler(ctx, services.NewServices())
+	handler := handler.NewHandler(ctx, services.NewServices(services.Deps{}))
 	s := server.NewServer(handler)
 	s.Serve(ctx, "8123")
 }
