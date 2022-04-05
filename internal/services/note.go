@@ -4,13 +4,17 @@ import (
 	"context"
 
 	"github.com/thewolf27/wolf-notebot/internal/core"
+	"github.com/thewolf27/wolf-notebot/internal/repository"
 )
 
 type NoteService struct {
+	repo repository.Notes
 }
 
-func NewNoteService() *NoteService {
-	return &NoteService{}
+func NewNoteService(repo repository.Notes) *NoteService {
+	return &NoteService{
+		repo: repo,
+	}
 }
 
 func (n *NoteService) AddNote(ctx context.Context, userId int64, categoryId int64, note string) error {

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/thewolf27/wolf-notebot/internal/core"
+	"github.com/thewolf27/wolf-notebot/internal/repository"
 )
 
 type Categories interface {
@@ -24,11 +25,13 @@ type Services struct {
 	Notes
 }
 
-type Deps struct{}
+type Deps struct {
+	Repository *repository.Repository
+}
 
 func NewServices(deps Deps) *Services {
 	return &Services{
-		Categories: NewCategoryService(),
-		Notes:      NewNoteService(),
+		Categories: NewCategoryService(deps.Repository.Categories),
+		Notes:      NewNoteService(deps.Repository.Notes),
 	}
 }

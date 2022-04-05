@@ -4,13 +4,17 @@ import (
 	"context"
 
 	"github.com/thewolf27/wolf-notebot/internal/core"
+	"github.com/thewolf27/wolf-notebot/internal/repository"
 )
 
 type CategoryService struct {
+	repo repository.Categories
 }
 
-func NewCategoryService() *CategoryService {
-	return &CategoryService{}
+func NewCategoryService(repo repository.Categories) *CategoryService {
+	return &CategoryService{
+		repo: repo,
+	}
 }
 
 func (c *CategoryService) AddCategory(ctx context.Context, userId int64, name string) error {
