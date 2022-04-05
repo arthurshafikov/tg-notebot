@@ -1,1 +1,10 @@
 version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: supersecret
+    ports:
+      - 27017:27017
