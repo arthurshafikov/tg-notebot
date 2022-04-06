@@ -1,7 +1,10 @@
 package core
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Category struct {
-	ID     uint64
-	UserId uint64
-	Name   string
+	ID     primitive.ObjectID `bson:"_id"`
+	UserId int                `bson:"user_id"`
+	Name   string             `bson:"name"`
+	Notes  []Note             `bson:"notes"`
 }

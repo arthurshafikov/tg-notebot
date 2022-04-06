@@ -1,8 +1,9 @@
 package core
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type User struct {
-	ID         uint64
-	TelegramId uint64
-	Name       string
-	SaltToken  string
+	ID        primitive.ObjectID `bson:"_id"`
+	Name      string             `bson:"name"`
+	SaltToken string             `bson:"salt_token"`
 }
