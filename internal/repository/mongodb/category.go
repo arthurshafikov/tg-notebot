@@ -14,66 +14,47 @@ type Category struct {
 
 func NewCategory(db *mongo.Client) *Category {
 	return &Category{
-		collection: db.Database("homestead").Collection("categories"),
+		collection: db.Database("homestead").Collection("users"),
 	}
 }
 
-func (c *Category) AddCategory(ctx context.Context, userId int, name string) error {
-	_, err := c.collection.InsertOne(ctx, bson.D{
-		{Key: "user_id", Value: userId},
-		{Key: "name", Value: name},
-		{Key: "posts", Value: []core.Note{}},
-	})
-	if err != nil {
-		return err
-	}
+func (c *Category) AddCategory(ctx context.Context, userName, name string) error {
+	match := bson.M{"name": userName}
+	change := bson.M{"$push": bson.M{"categories": core.Category{
+		Name:  name,
+		Notes: []core.Note{},
+	}}}
 
-	return nil
+	return c.collection.FindOneAndUpdate(ctx, match, change).Err()
 }
 
-func (c *Category) RemoveCategory(ctx context.Context, userId int, name string) error {
-	res, err := c.collection.DeleteOne(ctx, bson.D{{"user_id", userId}, {"name", name}})
-	if err != nil {
-		return err
-	}
+func (c *Category) RemoveCategory(ctx context.Context, userName, name string) error {
+	match := bson.M{"name": userName}
+	change := bson.M{"$pull": bson.M{"categories": bson.M{
+		"name": name,
+	}}}
 
-	if res.DeletedCount < 1 {
-		return core.ErrNothingWasDeleted
-	}
-
-	return nil
+	return c.collection.FindOneAndUpdate(ctx, match, change).Err()
 }
 
-func (c *Category) RenameCategory(ctx context.Context, userId int, name, newName string) error {
-	res, err := c.collection.UpdateOne(
-		ctx,
-		bson.D{{"user_id", userId}, {"name", name}},
-		bson.D{
-			{"$set", bson.D{{"name", newName}}},
-		},
-	)
-	if err != nil {
-		return err
-	}
+func (c *Category) RenameCategory(ctx context.Context, userName, name, newName string) error {
+	match := bson.M{"$and": []interface{}{bson.M{"name": userName}, bson.M{"categories.name": name}}}
+	change := bson.M{"$set": bson.M{"categories.$.name": newName}}
 
-	if res.ModifiedCount < 1 {
-		return core.ErrNothingWasUpdated
-	}
-
-	return nil
+	return c.collection.FindOneAndUpdate(ctx, match, change).Err()
 }
 
-func (c *Category) ListCategories(ctx context.Context, userId int) ([]core.Category, error) {
-	var categories []core.Category
+func (c *Category) ListCategories(ctx context.Context, userName string) ([]core.Category, error) {
+	var user core.User
 
-	cursor, err := c.collection.Find(ctx, bson.D{{"user_id", userId}})
-	if err != nil {
-		return categories, err
+	res := c.collection.FindOne(ctx, bson.M{"name": userName})
+	if res.Err() != nil {
+		return []core.Category{}, res.Err()
 	}
 
-	if err = cursor.All(ctx, &categories); err != nil {
-		return categories, err
+	if err := res.Decode(&user); err != nil {
+		return []core.Category{}, err
 	}
 
-	return categories, nil
+	return user.Categories, nil
 }

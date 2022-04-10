@@ -9,10 +9,10 @@ import (
 )
 
 type Categories interface {
-	AddCategory(ctx context.Context, userId int, name string) error
-	RemoveCategory(ctx context.Context, userId int, name string) error
-	RenameCategory(ctx context.Context, userId int, name, newName string) error
-	ListCategories(ctx context.Context, userId int) ([]core.Category, error)
+	AddCategory(ctx context.Context, userName, name string) error
+	RemoveCategory(ctx context.Context, userName, name string) error
+	RenameCategory(ctx context.Context, userName, name, newName string) error
+	ListCategories(ctx context.Context, userName string) ([]core.Category, error)
 }
 
 type Notes interface {
