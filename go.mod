@@ -1,4 +1,4 @@
-module github.com/arthurshafikov/wolf-notebot
+module github.com/arthurshafikov/tg-notebot
 
 go 1.18
 

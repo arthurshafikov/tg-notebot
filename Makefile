@@ -1,7 +1,7 @@
 BIN := "./.bin/app"
 DOCKER_COMPOSE_FILE := "./deployments/docker-compose.yml"
 DOCKER_COMPOSE_TEST_FILE := "./deployments/docker-compose.tests.yml"
-APP_NAME := "wolf-notebot"
+APP_NAME := "tg-notebot"
 
 GIT_HASH := $(shell git log --format="%h" -n 1)
 LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%dT%H:%M:%S) -X main.gitHash=$(GIT_HASH)

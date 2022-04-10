@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/arthurshafikov/wolf-notebot/internal/core"
-	"github.com/arthurshafikov/wolf-notebot/internal/services"
+	"github.com/arthurshafikov/tg-notebot/internal/core"
+	"github.com/arthurshafikov/tg-notebot/internal/services"
 	"github.com/gin-gonic/gin"
 )
 

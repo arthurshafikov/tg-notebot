@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 
-	"github.com/arthurshafikov/wolf-notebot/internal/core"
-	"github.com/arthurshafikov/wolf-notebot/internal/repository"
+	"github.com/arthurshafikov/tg-notebot/internal/core"
+	"github.com/arthurshafikov/tg-notebot/internal/repository"
 )
 
 type CategoryService struct {

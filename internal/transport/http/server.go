@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	handler "github.com/arthurshafikov/wolf-notebot/internal/transport/http/v1"
+	handler "github.com/arthurshafikov/tg-notebot/internal/transport/http/v1"
 	"github.com/gin-gonic/gin"
 )
 
