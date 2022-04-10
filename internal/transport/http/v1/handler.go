@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/arthurshafikov/wolf-notebot/internal/core"
+	"github.com/arthurshafikov/wolf-notebot/internal/services"
 	"github.com/gin-gonic/gin"
-	"github.com/thewolf27/wolf-notebot/internal/core"
-	"github.com/thewolf27/wolf-notebot/internal/services"
 )
 
 type Handler struct {

@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
+	handler "github.com/arthurshafikov/wolf-notebot/internal/transport/http/v1"
 	"github.com/gin-gonic/gin"
-	handler "github.com/thewolf27/wolf-notebot/internal/transport/http/v1"
 )
 
 type Server struct {

@@ -3,11 +3,11 @@ package app
 import (
 	"context"
 
-	"github.com/thewolf27/wolf-notebot/internal/repository"
-	"github.com/thewolf27/wolf-notebot/internal/repository/mongodb"
-	"github.com/thewolf27/wolf-notebot/internal/services"
-	server "github.com/thewolf27/wolf-notebot/internal/transport/http"
-	handler "github.com/thewolf27/wolf-notebot/internal/transport/http/v1"
+	"github.com/arthurshafikov/wolf-notebot/internal/repository"
+	"github.com/arthurshafikov/wolf-notebot/internal/repository/mongodb"
+	"github.com/arthurshafikov/wolf-notebot/internal/services"
+	server "github.com/arthurshafikov/wolf-notebot/internal/transport/http"
+	handler "github.com/arthurshafikov/wolf-notebot/internal/transport/http/v1"
 )
 
 func Run() {

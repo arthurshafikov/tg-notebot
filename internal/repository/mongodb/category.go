@@ -3,7 +3,7 @@ package mongodb
 import (
 	"context"
 
-	"github.com/thewolf27/wolf-notebot/internal/core"
+	"github.com/arthurshafikov/wolf-notebot/internal/core"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )

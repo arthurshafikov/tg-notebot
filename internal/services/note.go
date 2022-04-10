@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 
-	"github.com/thewolf27/wolf-notebot/internal/core"
-	"github.com/thewolf27/wolf-notebot/internal/repository"
+	"github.com/arthurshafikov/wolf-notebot/internal/core"
+	"github.com/arthurshafikov/wolf-notebot/internal/repository"
 )
 
 type NoteService struct {

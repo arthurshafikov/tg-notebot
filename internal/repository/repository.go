@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/thewolf27/wolf-notebot/internal/core"
-	"github.com/thewolf27/wolf-notebot/internal/repository/mongodb"
+	"github.com/arthurshafikov/wolf-notebot/internal/core"
+	"github.com/arthurshafikov/wolf-notebot/internal/repository/mongodb"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
