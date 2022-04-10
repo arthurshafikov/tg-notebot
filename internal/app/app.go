@@ -2,7 +2,9 @@ package app
 
 import (
 	"context"
+	"log"
 
+	"github.com/arthurshafikov/tg-notebot/internal/config"
 	"github.com/arthurshafikov/tg-notebot/internal/repository"
 	"github.com/arthurshafikov/tg-notebot/internal/repository/mongodb"
 	"github.com/arthurshafikov/tg-notebot/internal/services"
@@ -12,15 +14,16 @@ import (
 
 func Run() {
 	ctx := context.Background()
+	config := config.NewConfig("./")
 
 	mongo, err := mongodb.NewMongoDB(ctx, mongodb.Config{
-		Host:     "localhost",
-		Port:     "27017",
-		Username: "root",
-		Password: "supersecret", // todo .env
+		Host:     config.DatabaseConfig.Host,
+		Port:     config.DatabaseConfig.Port,
+		Username: config.DatabaseConfig.Username,
+		Password: config.DatabaseConfig.Password,
 	})
 	if err != nil {
-		panic(err) // temp
+		log.Fatalln(err)
 	}
 
 	repository := repository.NewRepository(mongo)
@@ -31,5 +34,5 @@ func Run() {
 
 	handler := handler.NewHandler(ctx, services)
 	s := server.NewServer(handler)
-	s.Serve(ctx, "8123")
+	s.Serve(ctx, config.AppConfig.HTTPPort)
 }
