@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"flag"
 	"log"
 
 	"github.com/arthurshafikov/tg-notebot/internal/config"
@@ -12,9 +13,17 @@ import (
 	handler "github.com/arthurshafikov/tg-notebot/internal/transport/http/v1"
 )
 
+var (
+	envFilePath string
+)
+
+func init() {
+	flag.StringVar(&envFilePath, "env", "./", "Path to .env file folder")
+}
+
 func Run() {
 	ctx := context.Background()
-	config := config.NewConfig("./")
+	config := config.NewConfig(envFilePath)
 
 	mongo, err := mongodb.NewMongoDB(ctx, mongodb.Config{
 		Host:     config.DatabaseConfig.Host,
