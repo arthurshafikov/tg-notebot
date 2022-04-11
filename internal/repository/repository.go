@@ -16,9 +16,9 @@ type Categories interface {
 }
 
 type Notes interface {
-	AddNote(ctx context.Context, userId, categoryId int64, note string) error
-	ListNotes(ctx context.Context, userId, categoryId int64) ([]core.Note, error)
-	RemoveNotes(ctx context.Context, userId, notesNumbers []int) error
+	AddNote(ctx context.Context, userName, categoryName string, note string) error
+	ListNotes(ctx context.Context, userName, categoryName string) ([]core.Note, error)
+	RemoveNotes(ctx context.Context, userName, categoryName, noteContent string) error
 }
 
 type Repository struct {
@@ -29,5 +29,6 @@ type Repository struct {
 func NewRepository(db *mongo.Client) *Repository {
 	return &Repository{
 		Categories: mongodb.NewCategory(db),
+		Notes:      mongodb.NewNote(db),
 	}
 }
