@@ -21,14 +21,20 @@ type Notes interface {
 	RemoveNotes(ctx context.Context, userName, categoryName, noteContent string) error
 }
 
+type Users interface {
+	Create(ctx context.Context, userName string) error
+}
+
 type Repository struct {
 	Categories
 	Notes
+	Users
 }
 
 func NewRepository(db *mongo.Client) *Repository {
 	return &Repository{
 		Categories: mongodb.NewCategory(db),
 		Notes:      mongodb.NewNote(db),
+		Users:      mongodb.NewUser(db),
 	}
 }
