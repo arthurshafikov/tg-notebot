@@ -48,10 +48,6 @@ func Run() {
 
 	telegramBot := telegram.NewTelegramBot(ctx, botApi, services)
 
-	// handler := handler.NewHandler(ctx, services)
-	// s := server.NewServer(handler)
-	// go s.Serve(ctx, config.AppConfig.HTTPPort)
-
 	if err := telegramBot.Start(); err != nil {
 		log.Fatalln(err)
 	}
