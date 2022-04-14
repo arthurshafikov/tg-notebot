@@ -46,7 +46,7 @@ func Run() {
 		Repository: repository,
 	})
 
-	telegramBot := telegram.NewTelegramBot(botApi, services)
+	telegramBot := telegram.NewTelegramBot(ctx, botApi, services)
 
 	// handler := handler.NewHandler(ctx, services)
 	// s := server.NewServer(handler)

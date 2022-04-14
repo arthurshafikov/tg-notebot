@@ -1,17 +1,21 @@
 package telegram
 
 import (
+	"context"
+
 	"github.com/arthurshafikov/tg-notebot/internal/services"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 type TelegramBot struct {
+	ctx      context.Context
 	bot      *tgbotapi.BotAPI
 	services *services.Services
 }
 
-func NewTelegramBot(bot *tgbotapi.BotAPI, services *services.Services) *TelegramBot {
+func NewTelegramBot(ctx context.Context, bot *tgbotapi.BotAPI, services *services.Services) *TelegramBot {
 	return &TelegramBot{
+		ctx:      ctx,
 		bot:      bot,
 		services: services,
 	}
