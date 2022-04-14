@@ -7,8 +7,13 @@ import (
 )
 
 type Config struct {
-	AppConfig      `mapstructure:",squash"`
-	DatabaseConfig `mapstructure:",squash"`
+	AppConfig         `mapstructure:",squash"`
+	DatabaseConfig    `mapstructure:",squash"`
+	TelegramBotConfig `mapstructure:",squash"`
+}
+
+type TelegramBotConfig struct {
+	APIKey string `mapstructure:"BOT_API_KEY"`
 }
 
 type AppConfig struct {

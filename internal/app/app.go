@@ -9,8 +9,8 @@ import (
 	"github.com/arthurshafikov/tg-notebot/internal/repository"
 	"github.com/arthurshafikov/tg-notebot/internal/repository/mongodb"
 	"github.com/arthurshafikov/tg-notebot/internal/services"
-	server "github.com/arthurshafikov/tg-notebot/internal/transport/http"
-	handler "github.com/arthurshafikov/tg-notebot/internal/transport/http/v1"
+	"github.com/arthurshafikov/tg-notebot/internal/telegram"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 var (
@@ -24,6 +24,11 @@ func init() {
 func Run() {
 	ctx := context.Background()
 	config := config.NewConfig(envFilePath)
+
+	botApi, err := tgbotapi.NewBotAPI(config.TelegramBotConfig.APIKey)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	mongo, err := mongodb.NewMongoDB(ctx, mongodb.Config{
 		Host:     config.DatabaseConfig.Host,
@@ -41,7 +46,13 @@ func Run() {
 		Repository: repository,
 	})
 
-	handler := handler.NewHandler(ctx, services)
-	s := server.NewServer(handler)
-	s.Serve(ctx, config.AppConfig.HTTPPort)
+	telegramBot := telegram.NewTelegramBot(botApi, services)
+
+	// handler := handler.NewHandler(ctx, services)
+	// s := server.NewServer(handler)
+	// go s.Serve(ctx, config.AppConfig.HTTPPort)
+
+	if err := telegramBot.Start(); err != nil {
+		log.Fatalln(err)
+	}
 }
