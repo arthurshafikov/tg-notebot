@@ -22,7 +22,7 @@ type Notes interface {
 }
 
 type Users interface {
-	Create(ctx context.Context, userName string) error
+	CreateIfNotExists(ctx context.Context, userName string, telegramUserId int64) error
 }
 
 type Repository struct {

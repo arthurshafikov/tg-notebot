@@ -20,9 +20,14 @@ type Notes interface {
 	RemoveNotes(ctx context.Context, userId, notesNumbers []int) error
 }
 
+type Users interface {
+	CreateIfNotExists(ctx context.Context, userName string, telegramChatID int64) error
+}
+
 type Services struct {
 	Categories
 	Notes
+	Users
 }
 
 type Deps struct {
@@ -33,5 +38,6 @@ func NewServices(deps Deps) *Services {
 	return &Services{
 		Categories: NewCategoryService(deps.Repository.Categories),
 		Notes:      NewNoteService(deps.Repository.Notes),
+		Users:      NewUserService(deps.Repository.Users),
 	}
 }
