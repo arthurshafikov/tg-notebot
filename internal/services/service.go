@@ -22,6 +22,7 @@ type Notes interface {
 
 type Users interface {
 	CreateIfNotExists(ctx context.Context, userName string, telegramChatID int64) error
+	CheckChatIDExists(ctx context.Context, telegramChatID int64) error
 }
 
 type Services struct {

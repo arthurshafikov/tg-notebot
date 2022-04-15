@@ -19,3 +19,7 @@ func NewUserService(repo repository.Users) *UserService {
 func (u *UserService) CreateIfNotExists(ctx context.Context, userName string, telegramChatID int64) error {
 	return u.repo.CreateIfNotExists(ctx, userName, telegramChatID)
 }
+
+func (u *UserService) CheckChatIDExists(ctx context.Context, telegramChatID int64) error {
+	return u.repo.CheckChatIDExists(ctx, telegramChatID)
+}

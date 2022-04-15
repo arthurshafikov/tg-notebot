@@ -39,3 +39,22 @@ func (u *User) CreateIfNotExists(ctx context.Context, userName string, telegramC
 
 	return err
 }
+
+func (u *User) CheckChatIDExists(ctx context.Context, telegramChatID int64) error {
+	filter := bson.M{"telegram_chat_id": telegramChatID}
+	res := u.collection.FindOne(ctx, filter)
+	if err := res.Err(); err != nil {
+		return err
+	}
+
+	var user core.User
+	if err := res.Decode(&user); err != nil {
+		return err
+	}
+
+	if user.TelegramChatID != telegramChatID {
+		return core.ErrNotFound
+	}
+
+	return nil
+}

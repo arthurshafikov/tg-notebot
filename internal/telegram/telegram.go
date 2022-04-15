@@ -35,6 +35,12 @@ func (b *TelegramBot) Start() error {
 			continue
 		}
 
+		if err := b.checkAuthorization(update.Message.Chat.ID); err != nil && update.Message.Text != startCommand {
+			b.handleError(update.Message.Chat.ID, err)
+
+			continue
+		}
+
 		// Handle commands
 		if update.Message.IsCommand() {
 			if err := b.handleCommand(update.Message); err != nil {
