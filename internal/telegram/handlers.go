@@ -1,22 +1,17 @@
 package telegram
 
 import (
+	"github.com/arthurshafikov/tg-notebot/internal/core"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-)
-
-var (
-	startCommand          = "start"
-	addCategoryCommand    = "addcategory"
-	removeCategoryCommand = "removecategory"
 )
 
 func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 	switch message.Command() {
-	case startCommand:
+	case core.StartCommand:
 		return b.commandHandler.HandleStart(message)
-	case addCategoryCommand:
+	case core.AddCategoryCommand:
 		return b.commandHandler.HandleAddCategory(message)
-	case removeCategoryCommand:
+	case core.RemoveCategoryCommand:
 		return b.commandHandler.HandleRemoveCategory(message)
 	}
 

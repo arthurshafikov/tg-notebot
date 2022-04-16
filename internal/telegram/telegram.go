@@ -3,6 +3,7 @@ package telegram
 import (
 	"context"
 
+	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"github.com/arthurshafikov/tg-notebot/internal/services"
 	"github.com/arthurshafikov/tg-notebot/internal/telegram/handlers/commands"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -37,27 +38,34 @@ func (b *TelegramBot) Start() error {
 		return err
 	}
 
+	var chatID int64
 	for update := range updates {
-		if err := b.checkAuthorization(update.Message.Chat.ID); err != nil && update.Message.Text != startCommand {
-			b.handleError(update.Message.Chat.ID, err)
+		if update.Message != nil {
+			chatID = update.Message.Chat.ID
+		} else if update.CallbackQuery != nil {
+			chatID = update.CallbackQuery.Message.Chat.ID
+		} else {
+			continue
+		}
+
+		if err := b.checkAuthorization(chatID); err != nil && update.Message.Text != core.StartCommand {
+			b.handleError(chatID, err)
 
 			continue
 		}
 
 		if update.CallbackQuery != nil {
 			if err := b.handleCallbackQuery(update.CallbackQuery); err != nil {
-				b.handleError(update.Message.Chat.ID, err)
+				b.handleError(chatID, err)
 			}
 
-			continue
-		} else if update.Message == nil {
 			continue
 		}
 
 		// Handle commands
 		if update.Message.IsCommand() {
 			if err := b.handleCommand(update.Message); err != nil {
-				b.handleError(update.Message.Chat.ID, err)
+				b.handleError(chatID, err)
 			}
 
 			continue
@@ -65,7 +73,7 @@ func (b *TelegramBot) Start() error {
 
 		// Handle regular messages
 		if err := b.handleMessage(update.Message); err != nil {
-			b.handleError(update.Message.Chat.ID, err)
+			b.handleError(chatID, err)
 		}
 	}
 
