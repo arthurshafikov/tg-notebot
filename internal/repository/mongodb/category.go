@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"context"
+	"errors"
 
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,6 +20,14 @@ func NewCategory(db *mongo.Client) *Category {
 }
 
 func (c *Category) AddCategory(ctx context.Context, telegramChatID int64, name string) error {
+	filter := bson.M{"$and": []interface{}{
+		bson.M{"telegram_chat_id": telegramChatID},
+		bson.M{"categories.name": name},
+	}}
+	if err := c.collection.FindOne(ctx, filter).Err(); !errors.Is(err, mongo.ErrNoDocuments) {
+		return core.ErrCategoryExists
+	}
+
 	match := bson.M{"telegram_chat_id": telegramChatID}
 	change := bson.M{"$push": bson.M{"categories": core.Category{
 		Name: name,

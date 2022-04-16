@@ -1,8 +1,10 @@
 package telegram
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/arthurshafikov/tg-notebot/internal/core"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -44,6 +46,9 @@ func (b *TelegramBot) handleAddCategory(message *tgbotapi.Message) error {
 	categoryName := message.CommandArguments()
 
 	if err := b.services.Categories.AddCategory(b.ctx, message.Chat.ID, categoryName); err != nil {
+		if errors.Is(err, core.ErrCategoryExists) {
+			return fmt.Errorf("The category %s already exists!", categoryName)
+		}
 		return err
 	}
 
