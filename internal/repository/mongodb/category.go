@@ -46,13 +46,29 @@ func (c *Category) RemoveCategory(ctx context.Context, telegramChatID int64, nam
 }
 
 func (c *Category) RenameCategory(ctx context.Context, telegramChatID int64, name, newName string) error {
+	filter := bson.M{"$and": []interface{}{
+		bson.M{"telegram_chat_id": telegramChatID},
+		bson.M{"categories.name": newName},
+	}}
+	if err := c.collection.FindOne(ctx, filter).Err(); !errors.Is(err, mongo.ErrNoDocuments) {
+		return core.ErrCategoryExists
+	}
+
 	match := bson.M{"$and": []interface{}{
 		bson.M{"telegram_chat_id": telegramChatID},
 		bson.M{"categories.name": name},
 	}}
 	change := bson.M{"$set": bson.M{"categories.$.name": newName}}
 
-	return c.collection.FindOneAndUpdate(ctx, match, change).Err()
+	if err := c.collection.FindOneAndUpdate(ctx, match, change).Err(); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return core.ErrNotFound
+		}
+
+		return err
+	}
+
+	return nil
 }
 
 func (c *Category) ListCategories(ctx context.Context, telegramChatID int64) ([]core.Category, error) {

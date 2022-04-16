@@ -15,6 +15,8 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 		return b.commandHandler.HandleAddCategory(message)
 	case core.RemoveCategoryCommand:
 		return b.commandHandler.HandleRemoveCategory(message)
+	case core.RenameCategoryCommand:
+		return b.commandHandler.HandleRenameCategory(message)
 	}
 
 	return nil
