@@ -25,5 +25,27 @@ func (c *CommandHandler) HandleAddCategory(message *tgbotapi.Message) error {
 }
 
 func (c *CommandHandler) HandleRemoveCategory(message *tgbotapi.Message) error {
-	return nil
+	categories, err := c.services.Categories.ListCategories(c.ctx, message.Chat.ID)
+	if err != nil {
+		return err
+	}
+
+	msg := tgbotapi.NewMessage(message.Chat.ID, "Select categories that you want to remove")
+
+	keyboard := tgbotapi.InlineKeyboardMarkup{}
+	for _, category := range categories {
+		var row []tgbotapi.InlineKeyboardButton
+		btn := tgbotapi.NewInlineKeyboardButtonData(
+			category.Name,
+			fmt.Sprintf("%s %s", core.RemoveCategoryCommand, category.Name),
+		)
+		row = append(row, btn)
+		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
+	}
+
+	msg.ReplyMarkup = keyboard
+	_, err = c.bot.Send(msg)
+
+	return err
+
 }
