@@ -1,17 +1,27 @@
 package telegram
 
 import (
-	"errors"
-	"fmt"
-
-	"github.com/arthurshafikov/tg-notebot/internal/core"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 var (
-	startCommand       = "start"
-	addCategoryCommand = "addcategory"
+	startCommand          = "start"
+	addCategoryCommand    = "addcategory"
+	removeCategoryCommand = "removecategory"
 )
+
+func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
+	switch message.Command() {
+	case startCommand:
+		return b.commandHandler.HandleStart(message)
+	case addCategoryCommand:
+		return b.commandHandler.HandleAddCategory(message)
+	case removeCategoryCommand:
+		return b.commandHandler.HandleRemoveCategory(message)
+	}
+
+	return nil
+}
 
 func (b *TelegramBot) handleMessage(message *tgbotapi.Message) error {
 	msg := tgbotapi.NewMessage(message.Chat.ID, `Please use one of commands:`) // todo describe commands
@@ -20,40 +30,9 @@ func (b *TelegramBot) handleMessage(message *tgbotapi.Message) error {
 	return nil
 }
 
-func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
-	switch message.Command() {
-	case startCommand:
-		return b.handleStart(message)
-	case addCategoryCommand:
-		return b.handleAddCategory(message)
-	}
+func (b *TelegramBot) handleCallbackQuery(query *tgbotapi.CallbackQuery) error {
+	msg := tgbotapi.NewMessage(query.Message.Chat.ID, "Ok, I remember")
+	b.bot.Send(msg)
 
 	return nil
-}
-
-func (b *TelegramBot) handleStart(message *tgbotapi.Message) error {
-	if err := b.services.Users.CreateIfNotExists(b.ctx, message.From.UserName, message.Chat.ID); err != nil {
-		return err
-	}
-
-	msg := tgbotapi.NewMessage(message.Chat.ID, `Successfully authorized!`)
-	_, err := b.bot.Send(msg)
-
-	return err
-}
-
-func (b *TelegramBot) handleAddCategory(message *tgbotapi.Message) error {
-	categoryName := message.CommandArguments()
-
-	if err := b.services.Categories.AddCategory(b.ctx, message.Chat.ID, categoryName); err != nil {
-		if errors.Is(err, core.ErrCategoryExists) {
-			return fmt.Errorf("The category %s already exists!", categoryName)
-		}
-		return err
-	}
-
-	msg := tgbotapi.NewMessage(message.Chat.ID, fmt.Sprintf("Category %s was created successfully!", categoryName))
-	_, err := b.bot.Send(msg)
-
-	return err
 }

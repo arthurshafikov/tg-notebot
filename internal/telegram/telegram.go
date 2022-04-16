@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/arthurshafikov/tg-notebot/internal/services"
+	"github.com/arthurshafikov/tg-notebot/internal/telegram/handlers/commands"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -11,13 +12,19 @@ type TelegramBot struct {
 	ctx      context.Context
 	bot      *tgbotapi.BotAPI
 	services *services.Services
+
+	commandHandler *commands.CommandHandler
 }
 
 func NewTelegramBot(ctx context.Context, bot *tgbotapi.BotAPI, services *services.Services) *TelegramBot {
+	commandHandler := commands.NewCommandHandler(ctx, bot, services)
+
 	return &TelegramBot{
 		ctx:      ctx,
 		bot:      bot,
 		services: services,
+
+		commandHandler: commandHandler,
 	}
 }
 
@@ -31,13 +38,19 @@ func (b *TelegramBot) Start() error {
 	}
 
 	for update := range updates {
-		if update.Message == nil { // ignore any non-Message Updates
-			continue
-		}
-
 		if err := b.checkAuthorization(update.Message.Chat.ID); err != nil && update.Message.Text != startCommand {
 			b.handleError(update.Message.Chat.ID, err)
 
+			continue
+		}
+
+		if update.CallbackQuery != nil {
+			if err := b.handleCallbackQuery(update.CallbackQuery); err != nil {
+				b.handleError(update.Message.Chat.ID, err)
+			}
+
+			continue
+		} else if update.Message == nil {
 			continue
 		}
 
