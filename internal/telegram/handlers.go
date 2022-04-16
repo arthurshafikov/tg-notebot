@@ -1,6 +1,8 @@
 package telegram
 
 import (
+	"strings"
+
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -26,8 +28,15 @@ func (b *TelegramBot) handleMessage(message *tgbotapi.Message) error {
 }
 
 func (b *TelegramBot) handleCallbackQuery(query *tgbotapi.CallbackQuery) error {
-	msg := tgbotapi.NewMessage(query.Message.Chat.ID, "Ok, I remember")
-	b.bot.Send(msg)
+	splittedData := strings.Split(query.Data, " ")
+	if len(splittedData) < 2 {
+		return core.ErrWrongCallbackQueryData
+	}
+
+	switch splittedData[0] {
+	case core.RemoveCategoryCommand:
+		return b.queryHandler.HandleRemoveCategory(b.ctx, query.Message.Chat.ID, splittedData[1])
+	}
 
 	return nil
 }
