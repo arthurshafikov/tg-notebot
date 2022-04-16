@@ -8,10 +8,10 @@ import (
 )
 
 type Categories interface {
-	AddCategory(ctx context.Context, userId int64, name string) error
-	RemoveCategory(ctx context.Context, userId, id int64) error
-	RenameCategory(ctx context.Context, userId, id int64, newName string) error
-	ListCategories(ctx context.Context, userId int64) ([]core.Category, error)
+	AddCategory(ctx context.Context, telegramChatID int64, name string) error
+	RemoveCategory(ctx context.Context, telegramChatID int64, name string) error
+	RenameCategory(ctx context.Context, telegramChatID int64, name, newName string) error
+	ListCategories(ctx context.Context, telegramChatID int64) ([]core.Category, error)
 }
 
 type Notes interface {

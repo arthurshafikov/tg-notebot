@@ -17,18 +17,18 @@ func NewCategoryService(repo repository.Categories) *CategoryService {
 	}
 }
 
-func (c *CategoryService) AddCategory(ctx context.Context, userId int64, name string) error {
-	panic("not implemented") // TODO: Implement
+func (c *CategoryService) AddCategory(ctx context.Context, telegramChatID int64, name string) error {
+	return c.repo.AddCategory(ctx, telegramChatID, name)
 }
 
-func (c *CategoryService) RemoveCategory(ctx context.Context, userId int64, id int64) error {
-	panic("not implemented") // TODO: Implement
+func (c *CategoryService) RemoveCategory(ctx context.Context, telegramChatID int64, name string) error {
+	return c.repo.RemoveCategory(ctx, telegramChatID, name)
 }
 
-func (c *CategoryService) RenameCategory(ctx context.Context, userId int64, id int64, newName string) error {
-	panic("not implemented") // TODO: Implement
+func (c *CategoryService) RenameCategory(ctx context.Context, telegramChatID int64, name, newName string) error {
+	return c.repo.RenameCategory(ctx, telegramChatID, name, newName)
 }
 
-func (c *CategoryService) ListCategories(ctx context.Context, userId int64) ([]core.Category, error) {
-	panic("not implemented") // TODO: Implement
+func (c *CategoryService) ListCategories(ctx context.Context, telegramChatID int64) ([]core.Category, error) {
+	return c.repo.ListCategories(ctx, telegramChatID)
 }
