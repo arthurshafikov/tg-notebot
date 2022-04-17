@@ -27,7 +27,7 @@ func (q *QueryHandler) HandleAddNote(ctx context.Context, telegramChatID int64, 
 	return err
 }
 
-func (q *QueryHandler) HandleListNotesInCategory(ctx context.Context, telegramChatID int64, categoryName string) error {
+func (q *QueryHandler) HandleListNotesToRemoveInCategory(ctx context.Context, telegramChatID int64, categoryName string) error {
 	notes, err := q.services.Notes.ListNotesFromCategory(q.ctx, telegramChatID, categoryName)
 	if err != nil {
 		return err
@@ -60,12 +60,30 @@ func (q *QueryHandler) HandleRemoveNotes(ctx context.Context, telegramChatID int
 	categoryName := args[0]
 	noteContent := strings.Join(args[1:], " ")
 
+	// remove unessesary context?
 	if err := q.services.Notes.RemoveNote(q.ctx, telegramChatID, categoryName, noteContent); err != nil {
 		return err
 	}
 
 	msg := tgbotapi.NewMessage(telegramChatID, "Note was removed successfully!")
 	_, err := q.bot.Send(msg)
+
+	return err
+}
+
+func (q *QueryHandler) HandleListNotes(ctx context.Context, telegramChatID int64, categoryName string) error {
+	notes, err := q.services.Notes.ListNotesFromCategory(ctx, telegramChatID, categoryName)
+	if err != nil {
+		return err
+	}
+
+	msgText := fmt.Sprintf("Here is your notes in category %s:", categoryName)
+	for _, note := range notes {
+		msgText += fmt.Sprintf("\n - %s", note.Content)
+	}
+
+	msg := tgbotapi.NewMessage(telegramChatID, msgText)
+	_, err = q.bot.Send(msg)
 
 	return err
 }

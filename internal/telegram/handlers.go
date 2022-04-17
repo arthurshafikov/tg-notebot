@@ -11,7 +11,6 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 	switch message.Command() {
 	case core.StartCommand:
 		return b.commandHandler.HandleStart(message)
-
 	// categories
 	case core.AddCategoryCommand:
 		return b.commandHandler.HandleAddCategory(message)
@@ -21,12 +20,13 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 		return b.commandHandler.HandleRenameCategory(message)
 	case core.ListCategoriesCommand:
 		return b.commandHandler.HandleListCategories(message)
-
 	// notes
 	case core.AddNoteCommand:
 		return b.commandHandler.HandleAddNote(message)
 	case core.RemoveNotesCommand:
 		return b.commandHandler.HandleRemoveNotes(message)
+	case core.ListNotes:
+		return b.commandHandler.HandleListNotes(message)
 	}
 
 	return nil
@@ -46,14 +46,18 @@ func (b *TelegramBot) handleCallbackQuery(query *tgbotapi.CallbackQuery) error {
 	}
 
 	switch splittedData[0] {
+	// categories
 	case core.RemoveCategoryCommand:
 		return b.queryHandler.HandleRemoveCategory(b.ctx, query.Message.Chat.ID, splittedData[1])
+	// notes
 	case core.AddNoteCommand:
 		return b.queryHandler.HandleAddNote(b.ctx, query.Message.Chat.ID, splittedData[1:])
 	case core.RemoveNotesChooseCategoryCallbackQuery:
-		return b.queryHandler.HandleListNotesInCategory(b.ctx, query.Message.Chat.ID, splittedData[1])
+		return b.queryHandler.HandleListNotesToRemoveInCategory(b.ctx, query.Message.Chat.ID, splittedData[1])
 	case core.RemoveNotesCommand:
 		return b.queryHandler.HandleRemoveNotes(b.ctx, query.Message.Chat.ID, splittedData[1:])
+	case core.ListNotesChooseCategoryCallbackQuery:
+		return b.queryHandler.HandleListNotes(b.ctx, query.Message.Chat.ID, splittedData[1])
 	}
 
 	return nil

@@ -10,7 +10,9 @@ const (
 
 	AddNoteCommand     = "addnote"
 	RemoveNotesCommand = "removenotes"
+	ListNotes          = "listnotes"
 
 	// CallbackQuery
 	RemoveNotesChooseCategoryCallbackQuery = "removenoteschoosecategory"
+	ListNotesChooseCategoryCallbackQuery   = "listnoteschoosecategory"
 )
