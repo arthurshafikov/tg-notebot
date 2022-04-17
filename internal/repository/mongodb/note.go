@@ -30,10 +30,14 @@ func (n *Note) AddNote(ctx context.Context, telegramChatID int64, categoryName, 
 	return n.collection.FindOneAndUpdate(ctx, match, change).Err()
 }
 
-func (n *Note) ListNotes(ctx context.Context, userName string, categoryName string) ([]core.Note, error) {
+func (n *Note) ListNotesFromCategory(
+	ctx context.Context,
+	telegramChatID int64,
+	categoryName string,
+) ([]core.Note, error) {
 	var notes []core.Note
 
-	filter := bson.M{"$and": []interface{}{bson.M{"name": userName}, bson.M{"categories.name": categoryName}}}
+	filter := bson.M{"telegram_chat_id": telegramChatID}
 
 	res := n.collection.FindOne(ctx, filter)
 	if res.Err() != nil {
@@ -46,16 +50,21 @@ func (n *Note) ListNotes(ctx context.Context, userName string, categoryName stri
 	}
 
 	for _, cat := range user.Categories {
-		notes = append(notes, cat.Notes...)
+		if cat.Name == categoryName {
+			notes = append(notes, cat.Notes...)
+		}
 	}
 
 	return notes, nil
 }
 
-func (n *Note) RemoveNotes(ctx context.Context, userName, categoryName, noteContent string) error {
-	match := bson.M{"$and": []interface{}{bson.M{"name": userName}, bson.M{"categories.name": categoryName}}}
+func (n *Note) RemoveNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
+	match := bson.M{"$and": []interface{}{
+		bson.M{"telegram_chat_id": telegramChatID},
+		bson.M{"categories.name": categoryName}},
+	}
 	change := bson.M{"$pull": bson.M{"categories.$.notes": bson.M{
-		"content": noteContent,
+		"content": content,
 	}}}
 
 	return n.collection.FindOneAndUpdate(ctx, match, change).Err()

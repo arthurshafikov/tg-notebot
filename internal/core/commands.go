@@ -8,5 +8,9 @@ const (
 	RenameCategoryCommand = "renamecategory"
 	ListCategoriesCommand = "listcategories"
 
-	AddNoteCommand = "addnote"
+	AddNoteCommand     = "addnote"
+	RemoveNotesCommand = "removenotes"
+
+	// CallbackQuery
+	RemoveNotesChooseCategoryCallbackQuery = "removenoteschoosecategory"
 )

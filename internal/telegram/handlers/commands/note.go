@@ -33,3 +33,28 @@ func (c *CommandHandler) HandleAddNote(message *tgbotapi.Message) error {
 
 	return err
 }
+
+func (c *CommandHandler) HandleRemoveNotes(message *tgbotapi.Message) error {
+	categories, err := c.services.Categories.ListCategories(c.ctx, message.Chat.ID)
+	if err != nil {
+		return err
+	}
+
+	msg := tgbotapi.NewMessage(message.Chat.ID, "Select in which category you want to remove notes")
+
+	keyboard := tgbotapi.InlineKeyboardMarkup{}
+	for _, category := range categories {
+		var row []tgbotapi.InlineKeyboardButton
+		btn := tgbotapi.NewInlineKeyboardButtonData(
+			category.Name,
+			fmt.Sprintf("%s %s", core.RemoveNotesChooseCategoryCallbackQuery, category.Name),
+		)
+		row = append(row, btn)
+		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
+	}
+
+	msg.ReplyMarkup = keyboard
+	_, err = c.bot.Send(msg)
+
+	return err
+}

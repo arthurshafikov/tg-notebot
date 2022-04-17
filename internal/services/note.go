@@ -21,10 +21,10 @@ func (n *NoteService) AddNote(ctx context.Context, telegramChatID int64, categor
 	return n.repo.AddNote(ctx, telegramChatID, categoryName, content)
 }
 
-func (n *NoteService) ListNotes(ctx context.Context, userId int64, categoryId int64) ([]core.Note, error) {
-	panic("not implemented") // TODO: Implement
+func (n *NoteService) ListNotesFromCategory(ctx context.Context, telegramChatID int64, categoryName string) ([]core.Note, error) {
+	return n.repo.ListNotesFromCategory(ctx, telegramChatID, categoryName)
 }
 
-func (n *NoteService) RemoveNotes(ctx context.Context, userId []int, notesNumbers []int) error {
-	panic("not implemented") // TODO: Implement
+func (n *NoteService) RemoveNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
+	return n.repo.RemoveNote(ctx, telegramChatID, categoryName, content)
 }

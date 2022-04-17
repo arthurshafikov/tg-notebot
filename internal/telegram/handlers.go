@@ -25,6 +25,8 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 	// notes
 	case core.AddNoteCommand:
 		return b.commandHandler.HandleAddNote(message)
+	case core.RemoveNotesCommand:
+		return b.commandHandler.HandleRemoveNotes(message)
 	}
 
 	return nil
@@ -48,6 +50,10 @@ func (b *TelegramBot) handleCallbackQuery(query *tgbotapi.CallbackQuery) error {
 		return b.queryHandler.HandleRemoveCategory(b.ctx, query.Message.Chat.ID, splittedData[1])
 	case core.AddNoteCommand:
 		return b.queryHandler.HandleAddNote(b.ctx, query.Message.Chat.ID, splittedData[1:])
+	case core.RemoveNotesChooseCategoryCallbackQuery:
+		return b.queryHandler.HandleListNotesInCategory(b.ctx, query.Message.Chat.ID, splittedData[1])
+	case core.RemoveNotesCommand:
+		return b.queryHandler.HandleRemoveNotes(b.ctx, query.Message.Chat.ID, splittedData[1:])
 	}
 
 	return nil
