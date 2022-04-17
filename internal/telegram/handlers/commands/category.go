@@ -74,3 +74,20 @@ func (c *CommandHandler) HandleRenameCategory(message *tgbotapi.Message) error {
 
 	return err
 }
+
+func (c *CommandHandler) HandleListCategories(message *tgbotapi.Message) error {
+	categories, err := c.services.Categories.ListCategories(c.ctx, message.Chat.ID)
+	if err != nil {
+		return err
+	}
+
+	msgText := "Here is your categories:"
+	for _, category := range categories {
+		msgText += fmt.Sprintf("\n - %s [%v]", category.Name, len(category.Notes))
+	}
+
+	msg := tgbotapi.NewMessage(message.Chat.ID, msgText)
+	_, err = c.bot.Send(msg)
+
+	return err
+}

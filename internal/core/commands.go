@@ -5,4 +5,5 @@ const (
 	AddCategoryCommand    = "addcategory"
 	RemoveCategoryCommand = "removecategory"
 	RenameCategoryCommand = "renamecategory"
+	ListCategoriesCommand = "listcategories"
 )
