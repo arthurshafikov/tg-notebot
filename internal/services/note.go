@@ -17,8 +17,8 @@ func NewNoteService(repo repository.Notes) *NoteService {
 	}
 }
 
-func (n *NoteService) AddNote(ctx context.Context, userId int64, categoryId int64, note string) error {
-	panic("not implemented") // TODO: Implement
+func (n *NoteService) AddNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
+	return n.repo.AddNote(ctx, telegramChatID, categoryName, content)
 }
 
 func (n *NoteService) ListNotes(ctx context.Context, userId int64, categoryId int64) ([]core.Note, error) {

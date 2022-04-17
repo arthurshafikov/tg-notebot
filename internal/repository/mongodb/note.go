@@ -18,10 +18,13 @@ func NewNote(db *mongo.Client) *Note {
 	}
 }
 
-func (n *Note) AddNote(ctx context.Context, userName string, categoryName string, note string) error {
-	match := bson.M{"$and": []interface{}{bson.M{"name": userName}, bson.M{"categories.name": categoryName}}}
+func (n *Note) AddNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
+	match := bson.M{"$and": []interface{}{
+		bson.M{"telegram_chat_id": telegramChatID},
+		bson.M{"categories.name": categoryName}},
+	}
 	change := bson.M{"$push": bson.M{"categories.$.notes": core.Note{
-		Content: note,
+		Content: content,
 	}}}
 
 	return n.collection.FindOneAndUpdate(ctx, match, change).Err()

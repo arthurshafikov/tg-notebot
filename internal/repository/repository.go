@@ -16,7 +16,7 @@ type Categories interface {
 }
 
 type Notes interface {
-	AddNote(ctx context.Context, userName, categoryName string, note string) error
+	AddNote(ctx context.Context, telegramChatID int64, categoryName, content string) error
 	ListNotes(ctx context.Context, userName, categoryName string) ([]core.Note, error)
 	RemoveNotes(ctx context.Context, userName, categoryName, noteContent string) error
 }
