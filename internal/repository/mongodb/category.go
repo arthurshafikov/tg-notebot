@@ -30,7 +30,8 @@ func (c *Category) AddCategory(ctx context.Context, telegramChatID int64, name s
 
 	match := bson.M{"telegram_chat_id": telegramChatID}
 	change := bson.M{"$push": bson.M{"categories": core.Category{
-		Name: name,
+		Name:  name,
+		Notes: []core.Note{},
 	}}}
 
 	return c.collection.FindOneAndUpdate(ctx, match, change).Err()
