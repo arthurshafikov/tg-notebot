@@ -52,7 +52,7 @@ func (b *TelegramBot) Start() error {
 			continue
 		}
 
-		if err := b.checkAuthorization(chatID); err != nil && update.Message.Text != core.StartCommand {
+		if err := b.checkAuthorization(chatID); err != nil && update.Message.Command() != core.StartCommand {
 			b.handleError(chatID, err)
 
 			continue
