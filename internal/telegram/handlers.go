@@ -27,6 +27,8 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 		return b.commandHandler.HandleRemoveNotes(message)
 	case core.ListNotes:
 		return b.commandHandler.HandleListNotes(message)
+	case core.ListAllNotes:
+		return b.commandHandler.HandleListAllNotes(message)
 	}
 
 	return nil

@@ -83,3 +83,25 @@ func (c *CommandHandler) HandleListNotes(message *tgbotapi.Message) error {
 
 	return err
 }
+
+func (c *CommandHandler) HandleListAllNotes(message *tgbotapi.Message) error {
+	categories, err := c.services.Categories.ListCategories(c.ctx, message.Chat.ID)
+	if err != nil {
+		return err
+	}
+
+	msgText := "Here is all your notes"
+
+	for _, category := range categories {
+		msgText += fmt.Sprintf("\n %s:", category.Name)
+		for _, note := range category.Notes {
+			msgText += fmt.Sprintf("\n - %s", note.Content)
+		}
+		msgText += "\n"
+	}
+
+	msg := tgbotapi.NewMessage(message.Chat.ID, msgText)
+	_, err = c.bot.Send(msg)
+
+	return err
+}
