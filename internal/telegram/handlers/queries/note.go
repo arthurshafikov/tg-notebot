@@ -76,9 +76,14 @@ func (q *QueryHandler) HandleListNotes(telegramChatID int64, categoryName string
 		return err
 	}
 
-	msgText := fmt.Sprintf("Here is your notes in category %s:", categoryName)
-	for _, note := range notes {
-		msgText += fmt.Sprintf("\n - %s", note.Content)
+	var msgText string
+	if len(notes) > 0 {
+		msgText = fmt.Sprintf("Here is your notes in category %s:", categoryName)
+		for _, note := range notes {
+			msgText += fmt.Sprintf("\n - %s", note.Content)
+		}
+	} else {
+		msgText = fmt.Sprintf("There is no notes in category %s...", categoryName)
 	}
 
 	msg := tgbotapi.NewMessage(telegramChatID, msgText)
