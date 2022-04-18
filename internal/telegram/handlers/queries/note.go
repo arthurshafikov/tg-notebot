@@ -1,7 +1,6 @@
 package queries
 
 import (
-	"context"
 	"fmt"
 	"strings"
 
@@ -9,7 +8,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func (q *QueryHandler) HandleAddNote(ctx context.Context, telegramChatID int64, args []string) error {
+func (q *QueryHandler) HandleAddNote(telegramChatID int64, args []string) error {
 	if len(args) < 2 {
 		return core.ErrServerError
 	}
@@ -27,7 +26,7 @@ func (q *QueryHandler) HandleAddNote(ctx context.Context, telegramChatID int64, 
 	return err
 }
 
-func (q *QueryHandler) HandleListNotesToRemoveInCategory(ctx context.Context, telegramChatID int64, categoryName string) error {
+func (q *QueryHandler) HandleListNotesToRemoveInCategory(telegramChatID int64, categoryName string) error {
 	notes, err := q.services.Notes.ListNotesFromCategory(q.ctx, telegramChatID, categoryName)
 	if err != nil {
 		return err
@@ -52,7 +51,7 @@ func (q *QueryHandler) HandleListNotesToRemoveInCategory(ctx context.Context, te
 	return err
 }
 
-func (q *QueryHandler) HandleRemoveNotes(ctx context.Context, telegramChatID int64, args []string) error {
+func (q *QueryHandler) HandleRemoveNotes(telegramChatID int64, args []string) error {
 	if len(args) < 2 {
 		return core.ErrServerError
 	}
@@ -71,8 +70,8 @@ func (q *QueryHandler) HandleRemoveNotes(ctx context.Context, telegramChatID int
 	return err
 }
 
-func (q *QueryHandler) HandleListNotes(ctx context.Context, telegramChatID int64, categoryName string) error {
-	notes, err := q.services.Notes.ListNotesFromCategory(ctx, telegramChatID, categoryName)
+func (q *QueryHandler) HandleListNotes(telegramChatID int64, categoryName string) error {
+	notes, err := q.services.Notes.ListNotesFromCategory(q.ctx, telegramChatID, categoryName)
 	if err != nil {
 		return err
 	}
