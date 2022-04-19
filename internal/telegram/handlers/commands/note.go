@@ -15,7 +15,7 @@ func (c *CommandHandler) HandleAddNote(message *tgbotapi.Message) error {
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(message.Chat.ID, "Select in which category you want to put this note")
+	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryForNote)
 
 	keyboard := tgbotapi.InlineKeyboardMarkup{}
 	for _, category := range categories {
@@ -40,7 +40,7 @@ func (c *CommandHandler) HandleRemoveNotes(message *tgbotapi.Message) error {
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(message.Chat.ID, "Select in which category you want to remove notes")
+	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToRemoveNotes)
 
 	keyboard := tgbotapi.InlineKeyboardMarkup{}
 	for _, category := range categories {
@@ -65,7 +65,7 @@ func (c *CommandHandler) HandleListNotes(message *tgbotapi.Message) error {
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(message.Chat.ID, "Select in which category you want to list notes")
+	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToListNotes)
 
 	keyboard := tgbotapi.InlineKeyboardMarkup{}
 	for _, category := range categories {
@@ -90,7 +90,7 @@ func (c *CommandHandler) HandleListAllNotes(message *tgbotapi.Message) error {
 		return err
 	}
 
-	msgText := "Here is all your notes"
+	msgText := c.messages.ListNotes
 
 	for _, category := range categories {
 		msgText += fmt.Sprintf("\n %s:", category.Name)

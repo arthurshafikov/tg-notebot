@@ -11,3 +11,13 @@ Messages:
   RenameCategoryWrongSyntax: "Please use the given syntax: /renamecategory oldName newName"
   SelectCategories: "Select categories that you want to remove"
   ListCategories: "Here is your categories:"
+
+  SelectCategoryForNote: "Select in which category you want to put this note"
+  SelectCategoryToRemoveNotes: "Select in which category you want to remove notes"
+  SelectCategoryToListNotes: "Select in which category you want to list notes"
+  NoteCreated: "Note was added successfully!"
+  NoteRemoved: "Note was removed successfully!"
+  SelectNotes: "Select notes to remove"
+  ListNotes: "Here is all your notes"
+  ListNotesInCategory: "Here is your notes in category %s:"
+  NoNotesInCategory: "There is no notes in category %s..."

@@ -20,7 +20,7 @@ func (q *QueryHandler) HandleAddNote(telegramChatID int64, args []string) error 
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(telegramChatID, "Note was added successfully!")
+	msg := tgbotapi.NewMessage(telegramChatID, q.messages.NoteCreated)
 	_, err := q.bot.Send(msg)
 
 	return err
@@ -32,7 +32,7 @@ func (q *QueryHandler) HandleListNotesToRemoveInCategory(telegramChatID int64, c
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(telegramChatID, "Select notes to remove")
+	msg := tgbotapi.NewMessage(telegramChatID, q.messages.SelectNotes)
 
 	keyboard := tgbotapi.InlineKeyboardMarkup{}
 	for _, note := range notes {
@@ -64,7 +64,7 @@ func (q *QueryHandler) HandleRemoveNotes(telegramChatID int64, args []string) er
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(telegramChatID, "Note was removed successfully!")
+	msg := tgbotapi.NewMessage(telegramChatID, q.messages.NoteRemoved)
 	_, err := q.bot.Send(msg)
 
 	return err
@@ -78,12 +78,12 @@ func (q *QueryHandler) HandleListNotes(telegramChatID int64, categoryName string
 
 	var msgText string
 	if len(notes) > 0 {
-		msgText = fmt.Sprintf("Here is your notes in category %s:", categoryName)
+		msgText = fmt.Sprintf(q.messages.ListNotesInCategory, categoryName)
 		for _, note := range notes {
 			msgText += fmt.Sprintf("\n - %s", note.Content)
 		}
 	} else {
-		msgText = fmt.Sprintf("There is no notes in category %s...", categoryName)
+		msgText = fmt.Sprintf(q.messages.NoNotesInCategory, categoryName)
 	}
 
 	msg := tgbotapi.NewMessage(telegramChatID, msgText)

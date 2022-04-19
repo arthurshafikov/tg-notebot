@@ -36,6 +36,16 @@ type Messages struct {
 	RenameCategoryWrongSyntax string
 	SelectCategories          string
 	ListCategories            string
+
+	SelectCategoryForNote       string
+	SelectCategoryToRemoveNotes string
+	SelectCategoryToListNotes   string
+	NoteCreated                 string
+	NoteRemoved                 string
+	SelectNotes                 string
+	ListNotes                   string
+	ListNotesInCategory         string
+	NoNotesInCategory           string
 }
 
 func NewConfig(envPath, configFolder string) *Config {
