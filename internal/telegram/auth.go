@@ -1,12 +1,10 @@
 package telegram
 
-import (
-	"github.com/arthurshafikov/tg-notebot/internal/core"
-)
+import "fmt"
 
 func (b *TelegramBot) checkAuthorization(chatID int64) error {
 	if err := b.services.Users.CheckChatIDExists(b.ctx, chatID); err != nil {
-		return core.ErrNotAuthorized
+		return fmt.Errorf(b.messages.NotAuthorized)
 	}
 
 	return nil

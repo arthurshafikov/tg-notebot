@@ -3,6 +3,7 @@ package telegram
 import (
 	"context"
 
+	"github.com/arthurshafikov/tg-notebot/internal/config"
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"github.com/arthurshafikov/tg-notebot/internal/services"
 	"github.com/arthurshafikov/tg-notebot/internal/telegram/handlers/commands"
@@ -17,11 +18,18 @@ type TelegramBot struct {
 
 	commandHandler *commands.CommandHandler
 	queryHandler   *queries.QueryHandler
+
+	messages config.Messages
 }
 
-func NewTelegramBot(ctx context.Context, bot *tgbotapi.BotAPI, services *services.Services) *TelegramBot {
-	commandHandler := commands.NewCommandHandler(ctx, bot, services)
-	queryHandler := queries.NewQueryHandler(ctx, bot, services)
+func NewTelegramBot(
+	ctx context.Context,
+	bot *tgbotapi.BotAPI,
+	services *services.Services,
+	messages config.Messages,
+) *TelegramBot {
+	commandHandler := commands.NewCommandHandler(ctx, bot, services, messages)
+	queryHandler := queries.NewQueryHandler(ctx, bot, services, messages)
 
 	return &TelegramBot{
 		ctx:      ctx,
@@ -30,6 +38,8 @@ func NewTelegramBot(ctx context.Context, bot *tgbotapi.BotAPI, services *service
 
 		commandHandler: commandHandler,
 		queryHandler:   queryHandler,
+
+		messages: messages,
 	}
 }
 

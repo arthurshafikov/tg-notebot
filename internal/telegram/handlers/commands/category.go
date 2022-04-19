@@ -14,12 +14,12 @@ func (c *CommandHandler) HandleAddCategory(message *tgbotapi.Message) error {
 
 	if err := c.services.Categories.AddCategory(c.ctx, message.Chat.ID, categoryName); err != nil {
 		if errors.Is(err, core.ErrCategoryExists) {
-			return fmt.Errorf("The category %s already exists!", categoryName)
+			return fmt.Errorf(c.messages.CategoryExists, categoryName)
 		}
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(message.Chat.ID, fmt.Sprintf("Category %s was created successfully!", categoryName))
+	msg := tgbotapi.NewMessage(message.Chat.ID, fmt.Sprintf(c.messages.CategoryCreated, categoryName))
 	_, err := c.bot.Send(msg)
 
 	return err
@@ -31,7 +31,7 @@ func (c *CommandHandler) HandleRemoveCategory(message *tgbotapi.Message) error {
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(message.Chat.ID, "Select categories that you want to remove")
+	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategories)
 
 	keyboard := tgbotapi.InlineKeyboardMarkup{}
 	for _, category := range categories {
@@ -53,14 +53,14 @@ func (c *CommandHandler) HandleRemoveCategory(message *tgbotapi.Message) error {
 func (c *CommandHandler) HandleRenameCategory(message *tgbotapi.Message) error {
 	args := strings.Split(message.CommandArguments(), " ")
 	if len(args) != 2 {
-		return fmt.Errorf("Please use the given syntax: /renamecategory oldName newName")
+		return fmt.Errorf(c.messages.RenameCategoryWrongSyntax)
 	}
 
 	if err := c.services.Categories.RenameCategory(c.ctx, message.Chat.ID, args[0], args[1]); err != nil {
 		if errors.Is(err, core.ErrCategoryExists) {
-			return fmt.Errorf("The category %s already exists!", args[1])
+			return fmt.Errorf(c.messages.CategoryExists, args[1])
 		} else if errors.Is(err, core.ErrNotFound) {
-			return fmt.Errorf("The category %s was not found!", args[0])
+			return fmt.Errorf(c.messages.CategoryNotFound, args[0])
 		}
 
 		return err
@@ -68,7 +68,7 @@ func (c *CommandHandler) HandleRenameCategory(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(
 		message.Chat.ID,
-		fmt.Sprintf("Category %s was successfully renamed to %s", args[0], args[1]),
+		fmt.Sprintf(c.messages.CategoryRenamed, args[0], args[1]),
 	)
 	_, err := c.bot.Send(msg)
 
@@ -81,7 +81,7 @@ func (c *CommandHandler) HandleListCategories(message *tgbotapi.Message) error {
 		return err
 	}
 
-	msgText := "Here is your categories:"
+	msgText := c.messages.ListCategories
 	for _, category := range categories {
 		msgText += fmt.Sprintf("\n - %s [%v]", category.Name, len(category.Notes))
 	}

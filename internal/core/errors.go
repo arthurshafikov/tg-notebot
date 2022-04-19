@@ -11,7 +11,4 @@ var (
 	ErrCategoryExists = errors.New("category already exists")
 
 	ErrWrongCallbackQueryData = errors.New("wrong callback query data")
-
-	// telegram message errors
-	ErrNotAuthorized = errors.New("You are not authorized! Type /start command to authorize") // todo config?
 )

@@ -1,2 +1,13 @@
 Messages:
   Start: "Some start"
+  NotAuthorized: "You are not authorized! Type /start command to authorize"
+  AuthSuccess: "Successfully authorized!"
+
+  CategoryExists: "The category %s already exists!"
+  CategoryNotFound: "The category %s was not found!"
+  CategoryCreated: "Category %s was created successfully!"
+  CategoryRemoved: "Category %s was successfully removed!"
+  CategoryRenamed: "Category %s was successfully renamed to %s"
+  RenameCategoryWrongSyntax: "Please use the given syntax: /renamecategory oldName newName"
+  SelectCategories: "Select categories that you want to remove"
+  ListCategories: "Here is your categories:"

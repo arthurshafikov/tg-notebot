@@ -24,7 +24,18 @@ type DatabaseConfig struct {
 }
 
 type Messages struct {
-	Start string
+	Start         string
+	NotAuthorized string
+	AuthSuccess   string
+
+	CategoryExists            string
+	CategoryNotFound          string
+	CategoryCreated           string
+	CategoryRemoved           string
+	CategoryRenamed           string
+	RenameCategoryWrongSyntax string
+	SelectCategories          string
+	ListCategories            string
 }
 
 func NewConfig(envPath, configFolder string) *Config {

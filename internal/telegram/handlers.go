@@ -35,7 +35,7 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 }
 
 func (b *TelegramBot) handleMessage(message *tgbotapi.Message) error {
-	msg := tgbotapi.NewMessage(message.Chat.ID, `Please use one of commands:`) // todo describe commands
+	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Start) // todo add note
 	b.bot.Send(msg)
 
 	return nil
