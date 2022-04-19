@@ -14,16 +14,18 @@ import (
 )
 
 var (
-	envFilePath string
+	envPath          string
+	configFolderPath string
 )
 
 func init() {
-	flag.StringVar(&envFilePath, "env", "./", "Path to .env file folder")
+	flag.StringVar(&envPath, "env", "./", "Path to .env file folder")
+	flag.StringVar(&configFolderPath, "cfgFolder", "./configs", "Path to configs folder")
 }
 
 func Run() {
 	ctx := context.Background()
-	config := config.NewConfig(envFilePath)
+	config := config.NewConfig(envPath, configFolderPath)
 
 	botApi, err := tgbotapi.NewBotAPI(config.TelegramBotConfig.APIKey)
 	if err != nil {
@@ -46,7 +48,7 @@ func Run() {
 		Repository: repository,
 	})
 
-	telegramBot := telegram.NewTelegramBot(ctx, botApi, services)
+	telegramBot := telegram.NewTelegramBot(ctx, botApi, services, config.Messages)
 
 	if err := telegramBot.Start(); err != nil {
 		log.Fatalln(err)
