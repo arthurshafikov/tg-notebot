@@ -12,7 +12,6 @@ func (q *QueryHandler) HandleRemoveCategory(telegramChatID int64, name string) e
 	}
 
 	msg := tgbotapi.NewMessage(telegramChatID, fmt.Sprintf(q.messages.CategoryRemoved, name))
-	_, err := q.bot.Send(msg)
 
-	return err
+	return q.sendMessage(msg)
 }

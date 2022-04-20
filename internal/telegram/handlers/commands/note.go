@@ -22,9 +22,8 @@ func (c *CommandHandler) HandleAddNote(message *tgbotapi.Message) error {
 	})
 
 	msg.ReplyMarkup = keyboard
-	_, err = c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }
 
 func (c *CommandHandler) HandleRemoveNotes(message *tgbotapi.Message) error {
@@ -40,9 +39,8 @@ func (c *CommandHandler) HandleRemoveNotes(message *tgbotapi.Message) error {
 	})
 
 	msg.ReplyMarkup = keyboard
-	_, err = c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }
 
 func (c *CommandHandler) HandleListNotes(message *tgbotapi.Message) error {
@@ -58,9 +56,8 @@ func (c *CommandHandler) HandleListNotes(message *tgbotapi.Message) error {
 	})
 
 	msg.ReplyMarkup = keyboard
-	_, err = c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }
 
 func (c *CommandHandler) HandleListAllNotes(message *tgbotapi.Message) error {
@@ -80,7 +77,6 @@ func (c *CommandHandler) HandleListAllNotes(message *tgbotapi.Message) error {
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, msgText)
-	_, err = c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }

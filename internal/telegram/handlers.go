@@ -36,6 +36,7 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 
 func (b *TelegramBot) handleMessage(message *tgbotapi.Message) error {
 	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Start) // todo add note
+	msg.ParseMode = "markdown"
 	b.bot.Send(msg)
 
 	return nil

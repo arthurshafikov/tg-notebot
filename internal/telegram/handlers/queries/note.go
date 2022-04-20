@@ -21,9 +21,8 @@ func (q *QueryHandler) HandleAddNote(telegramChatID int64, args []string) error 
 	}
 
 	msg := tgbotapi.NewMessage(telegramChatID, q.messages.NoteCreated)
-	_, err := q.bot.Send(msg)
 
-	return err
+	return q.sendMessage(msg)
 }
 
 func (q *QueryHandler) HandleListNotesToRemoveInCategory(telegramChatID int64, categoryName string) error {
@@ -51,9 +50,8 @@ func (q *QueryHandler) HandleListNotesToRemoveInCategory(telegramChatID int64, c
 	} else {
 		msg = tgbotapi.NewMessage(telegramChatID, fmt.Sprintf(q.messages.NoNotesInCategory, categoryName))
 	}
-	_, err = q.bot.Send(msg)
 
-	return err
+	return q.sendMessage(msg)
 }
 
 func (q *QueryHandler) HandleRemoveNotes(telegramChatID int64, args []string) error {
@@ -69,9 +67,8 @@ func (q *QueryHandler) HandleRemoveNotes(telegramChatID int64, args []string) er
 	}
 
 	msg := tgbotapi.NewMessage(telegramChatID, q.messages.NoteRemoved)
-	_, err := q.bot.Send(msg)
 
-	return err
+	return q.sendMessage(msg)
 }
 
 func (q *QueryHandler) HandleListNotes(telegramChatID int64, categoryName string) error {
@@ -91,7 +88,6 @@ func (q *QueryHandler) HandleListNotes(telegramChatID int64, categoryName string
 	}
 
 	msg := tgbotapi.NewMessage(telegramChatID, msgText)
-	_, err = q.bot.Send(msg)
 
-	return err
+	return q.sendMessage(msg)
 }

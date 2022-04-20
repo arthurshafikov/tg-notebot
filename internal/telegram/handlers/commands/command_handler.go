@@ -37,9 +37,8 @@ func (c *CommandHandler) HandleStart(message *tgbotapi.Message) error {
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.AuthSuccess)
-	_, err := c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }
 
 func (c *CommandHandler) getKeyboardCategories(
@@ -55,4 +54,11 @@ func (c *CommandHandler) getKeyboardCategories(
 	}
 
 	return keyboard
+}
+
+func (c *CommandHandler) sendMessage(msg tgbotapi.MessageConfig) error {
+	msg.ParseMode = "markdown"
+	_, err := c.bot.Send(msg)
+
+	return err
 }

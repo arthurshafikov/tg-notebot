@@ -20,9 +20,8 @@ func (c *CommandHandler) HandleAddCategory(message *tgbotapi.Message) error {
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, fmt.Sprintf(c.messages.CategoryCreated, categoryName))
-	_, err := c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }
 
 func (c *CommandHandler) HandleRemoveCategory(message *tgbotapi.Message) error {
@@ -38,9 +37,8 @@ func (c *CommandHandler) HandleRemoveCategory(message *tgbotapi.Message) error {
 	})
 
 	msg.ReplyMarkup = keyboard
-	_, err = c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }
 
 func (c *CommandHandler) HandleRenameCategory(message *tgbotapi.Message) error {
@@ -63,9 +61,8 @@ func (c *CommandHandler) HandleRenameCategory(message *tgbotapi.Message) error {
 		message.Chat.ID,
 		fmt.Sprintf(c.messages.CategoryRenamed, args[0], args[1]),
 	)
-	_, err := c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }
 
 func (c *CommandHandler) HandleListCategories(message *tgbotapi.Message) error {
@@ -80,7 +77,6 @@ func (c *CommandHandler) HandleListCategories(message *tgbotapi.Message) error {
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, msgText)
-	_, err = c.bot.Send(msg)
 
-	return err
+	return c.sendMessage(msg)
 }

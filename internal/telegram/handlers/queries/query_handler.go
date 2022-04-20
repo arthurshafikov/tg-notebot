@@ -28,3 +28,10 @@ func NewQueryHandler(
 		messages: messages,
 	}
 }
+
+func (q *QueryHandler) sendMessage(msg tgbotapi.MessageConfig) error {
+	msg.ParseMode = "markdown"
+	_, err := q.bot.Send(msg)
+
+	return err
+}
