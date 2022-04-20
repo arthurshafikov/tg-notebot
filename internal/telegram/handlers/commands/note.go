@@ -9,6 +9,9 @@ import (
 
 func (c *CommandHandler) HandleAddNote(message *tgbotapi.Message) error {
 	noteContent := message.CommandArguments()
+	if noteContent == "" {
+		noteContent = message.Text
+	}
 
 	categories, err := c.services.Categories.ListCategories(c.ctx, message.Chat.ID)
 	if err != nil {
