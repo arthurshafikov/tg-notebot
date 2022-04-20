@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/arthurshafikov/tg-notebot/internal/config"
+	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"github.com/arthurshafikov/tg-notebot/internal/services"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -39,4 +40,19 @@ func (c *CommandHandler) HandleStart(message *tgbotapi.Message) error {
 	_, err := c.bot.Send(msg)
 
 	return err
+}
+
+func (c *CommandHandler) getKeyboardCategories(
+	categories []core.Category,
+	callable func(category core.Category) (string, string),
+) tgbotapi.InlineKeyboardMarkup {
+	keyboard := tgbotapi.InlineKeyboardMarkup{}
+	for _, category := range categories {
+		var row []tgbotapi.InlineKeyboardButton
+		btn := tgbotapi.NewInlineKeyboardButtonData(callable(category))
+		row = append(row, btn)
+		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
+	}
+
+	return keyboard
 }

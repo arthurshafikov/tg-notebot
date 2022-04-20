@@ -32,20 +32,25 @@ func (q *QueryHandler) HandleListNotesToRemoveInCategory(telegramChatID int64, c
 		return err
 	}
 
-	msg := tgbotapi.NewMessage(telegramChatID, q.messages.SelectNotes)
+	var msg tgbotapi.MessageConfig
+	if len(notes) > 0 {
+		msg = tgbotapi.NewMessage(telegramChatID, q.messages.SelectNotes)
 
-	keyboard := tgbotapi.InlineKeyboardMarkup{}
-	for _, note := range notes {
-		var row []tgbotapi.InlineKeyboardButton
-		btn := tgbotapi.NewInlineKeyboardButtonData(
-			note.Content,
-			fmt.Sprintf("%s %s %s", core.RemoveNotesCommand, categoryName, note.Content),
-		)
-		row = append(row, btn)
-		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
+		keyboard := tgbotapi.InlineKeyboardMarkup{}
+		for _, note := range notes {
+			var row []tgbotapi.InlineKeyboardButton
+			btn := tgbotapi.NewInlineKeyboardButtonData(
+				note.Content,
+				fmt.Sprintf("%s %s %s", core.RemoveNotesCommand, categoryName, note.Content),
+			)
+			row = append(row, btn)
+			keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
+		}
+
+		msg.ReplyMarkup = keyboard
+	} else {
+		msg = tgbotapi.NewMessage(telegramChatID, fmt.Sprintf(q.messages.NoNotesInCategory, categoryName))
 	}
-
-	msg.ReplyMarkup = keyboard
 	_, err = q.bot.Send(msg)
 
 	return err
@@ -59,7 +64,6 @@ func (q *QueryHandler) HandleRemoveNotes(telegramChatID int64, args []string) er
 	categoryName := args[0]
 	noteContent := strings.Join(args[1:], " ")
 
-	// remove unessesary context?
 	if err := q.services.Notes.RemoveNote(q.ctx, telegramChatID, categoryName, noteContent); err != nil {
 		return err
 	}

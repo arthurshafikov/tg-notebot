@@ -17,16 +17,9 @@ func (c *CommandHandler) HandleAddNote(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryForNote)
 
-	keyboard := tgbotapi.InlineKeyboardMarkup{}
-	for _, category := range categories {
-		var row []tgbotapi.InlineKeyboardButton
-		btn := tgbotapi.NewInlineKeyboardButtonData(
-			category.Name,
-			fmt.Sprintf("%s %s %s", core.AddNoteCommand, category.Name, noteContent),
-		)
-		row = append(row, btn)
-		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
-	}
+	keyboard := c.getKeyboardCategories(categories, func(category core.Category) (string, string) {
+		return category.Name, fmt.Sprintf("%s %s %s", core.AddNoteCommand, category.Name, noteContent)
+	})
 
 	msg.ReplyMarkup = keyboard
 	_, err = c.bot.Send(msg)
@@ -42,16 +35,9 @@ func (c *CommandHandler) HandleRemoveNotes(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToRemoveNotes)
 
-	keyboard := tgbotapi.InlineKeyboardMarkup{}
-	for _, category := range categories {
-		var row []tgbotapi.InlineKeyboardButton
-		btn := tgbotapi.NewInlineKeyboardButtonData(
-			category.Name,
-			fmt.Sprintf("%s %s", core.RemoveNotesChooseCategoryCallbackQuery, category.Name),
-		)
-		row = append(row, btn)
-		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
-	}
+	keyboard := c.getKeyboardCategories(categories, func(category core.Category) (string, string) {
+		return category.Name, fmt.Sprintf("%s %s", core.RemoveNotesChooseCategoryCallbackQuery, category.Name)
+	})
 
 	msg.ReplyMarkup = keyboard
 	_, err = c.bot.Send(msg)
@@ -67,16 +53,9 @@ func (c *CommandHandler) HandleListNotes(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToListNotes)
 
-	keyboard := tgbotapi.InlineKeyboardMarkup{}
-	for _, category := range categories {
-		var row []tgbotapi.InlineKeyboardButton
-		btn := tgbotapi.NewInlineKeyboardButtonData(
-			category.Name,
-			fmt.Sprintf("%s %s", core.ListNotesChooseCategoryCallbackQuery, category.Name),
-		)
-		row = append(row, btn)
-		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
-	}
+	keyboard := c.getKeyboardCategories(categories, func(category core.Category) (string, string) {
+		return category.Name, fmt.Sprintf("%s %s", core.ListNotesChooseCategoryCallbackQuery, category.Name)
+	})
 
 	msg.ReplyMarkup = keyboard
 	_, err = c.bot.Send(msg)
