@@ -21,7 +21,7 @@ type Notes interface {
 }
 
 type Users interface {
-	CreateIfNotExists(ctx context.Context, userName string, telegramChatID int64) error
+	CreateIfNotExists(ctx context.Context, telegramChatID int64) error
 	CheckChatIDExists(ctx context.Context, telegramChatID int64) error
 }
 
@@ -36,9 +36,13 @@ type Deps struct {
 }
 
 func NewServices(deps Deps) *Services {
+	categories := NewCategoryService(deps.Repository.Categories)
+	notes := NewNoteService(deps.Repository.Notes)
+	users := NewUserService(deps.Repository.Users)
+
 	return &Services{
-		Categories: NewCategoryService(deps.Repository.Categories),
-		Notes:      NewNoteService(deps.Repository.Notes),
-		Users:      NewUserService(deps.Repository.Users),
+		Categories: categories,
+		Notes:      notes,
+		Users:      users,
 	}
 }

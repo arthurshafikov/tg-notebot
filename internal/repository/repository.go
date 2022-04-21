@@ -22,7 +22,7 @@ type Notes interface {
 }
 
 type Users interface {
-	CreateIfNotExists(ctx context.Context, userName string, telegramUserId int64) error
+	CreateIfNotExists(ctx context.Context, telegramUserId int64) error
 	CheckChatIDExists(ctx context.Context, telegramChatID int64) error
 }
 

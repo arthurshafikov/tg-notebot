@@ -32,7 +32,7 @@ func NewCommandHandler(
 }
 
 func (c *CommandHandler) HandleStart(message *tgbotapi.Message) error {
-	if err := c.services.Users.CreateIfNotExists(c.ctx, message.From.UserName, message.Chat.ID); err != nil {
+	if err := c.services.Users.CreateIfNotExists(c.ctx, message.Chat.ID); err != nil {
 		return err
 	}
 

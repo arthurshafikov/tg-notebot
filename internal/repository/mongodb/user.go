@@ -20,14 +20,13 @@ func NewUser(db *mongo.Client) *User {
 	}
 }
 
-func (u *User) CreateIfNotExists(ctx context.Context, userName string, telegramChatID int64) error {
+func (u *User) CreateIfNotExists(ctx context.Context, telegramChatID int64) error {
 	filter := bson.M{
 		"telegram_chat_id": telegramChatID,
 	}
 	user := core.User{
 		ID:             primitive.NewObjectID(),
 		TelegramChatID: telegramChatID,
-		SaltToken:      "someToken123", // todo generate token
 		Categories:     []core.Category{},
 	}
 	update := bson.M{
