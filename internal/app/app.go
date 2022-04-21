@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/arthurshafikov/tg-notebot/internal/config"
+	"github.com/arthurshafikov/tg-notebot/internal/logger"
 	"github.com/arthurshafikov/tg-notebot/internal/repository"
 	"github.com/arthurshafikov/tg-notebot/internal/repository/mongodb"
 	"github.com/arthurshafikov/tg-notebot/internal/services"
@@ -44,8 +45,10 @@ func Run() {
 
 	repository := repository.NewRepository(mongo)
 
+	logger := logger.NewLogger()
 	services := services.NewServices(services.Deps{
 		Repository: repository,
+		Logger:     logger,
 	})
 
 	telegramBot := telegram.NewTelegramBot(ctx, botApi, services, config.Messages)
