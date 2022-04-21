@@ -2,29 +2,59 @@ package services
 
 import (
 	"context"
+	"errors"
 
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"github.com/arthurshafikov/tg-notebot/internal/repository"
 )
 
 type NoteService struct {
-	repo repository.Notes
+	repo   repository.Notes
+	logger Logger
 }
 
-func NewNoteService(repo repository.Notes) *NoteService {
+func NewNoteService(logger Logger, repo repository.Notes) *NoteService {
 	return &NoteService{
-		repo: repo,
+		repo:   repo,
+		logger: logger,
 	}
 }
 
 func (n *NoteService) AddNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
-	return n.repo.AddNote(ctx, telegramChatID, categoryName, content)
+	if err := n.repo.AddNote(ctx, telegramChatID, categoryName, content); err != nil {
+		n.logger.Error(err)
+
+		return core.ErrServerError
+	}
+
+	return nil
 }
 
 func (n *NoteService) ListNotesFromCategory(ctx context.Context, telegramChatID int64, categoryName string) ([]core.Note, error) {
-	return n.repo.ListNotesFromCategory(ctx, telegramChatID, categoryName)
+	notes, err := n.repo.ListNotesFromCategory(ctx, telegramChatID, categoryName)
+	if err != nil {
+		if !errors.Is(core.ErrNotFound, err) {
+			n.logger.Error(err)
+
+			return notes, core.ErrServerError
+		}
+
+		return notes, core.ErrNotFound
+	}
+
+	return notes, nil
 }
 
 func (n *NoteService) RemoveNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
-	return n.repo.RemoveNote(ctx, telegramChatID, categoryName, content)
+	if err := n.repo.RemoveNote(ctx, telegramChatID, categoryName, content); err != nil {
+		if !errors.Is(core.ErrNotFound, err) {
+			n.logger.Error(err)
+
+			return core.ErrServerError
+		}
+
+		return core.ErrNotFound
+	}
+
+	return nil
 }

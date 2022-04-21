@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"context"
+	"errors"
 
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"go.mongodb.org/mongo-driver/bson"
@@ -40,8 +41,12 @@ func (n *Note) ListNotesFromCategory(
 	filter := bson.M{"telegram_chat_id": telegramChatID}
 
 	res := n.collection.FindOne(ctx, filter)
-	if res.Err() != nil {
-		return notes, res.Err()
+	if err := res.Err(); err != nil {
+		if errors.Is(mongo.ErrNoDocuments, err) {
+			return notes, core.ErrNotFound
+		}
+
+		return notes, err
 	}
 
 	var user core.User
@@ -67,5 +72,13 @@ func (n *Note) RemoveNote(ctx context.Context, telegramChatID int64, categoryNam
 		"content": content,
 	}}}
 
-	return n.collection.FindOneAndUpdate(ctx, match, change).Err()
+	if err := n.collection.FindOneAndUpdate(ctx, match, change).Err(); err != nil {
+		if errors.Is(mongo.ErrNoDocuments, err) {
+			return core.ErrNotFound
+		}
+
+		return err
+	}
+
+	return nil
 }
