@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"context"
+	"errors"
 
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"go.mongodb.org/mongo-driver/bson"
@@ -43,6 +44,10 @@ func (u *User) CheckChatIDExists(ctx context.Context, telegramChatID int64) erro
 	filter := bson.M{"telegram_chat_id": telegramChatID}
 	res := u.collection.FindOne(ctx, filter)
 	if err := res.Err(); err != nil {
+		if errors.Is(mongo.ErrNoDocuments, err) {
+			return core.ErrNotFound
+		}
+
 		return err
 	}
 
