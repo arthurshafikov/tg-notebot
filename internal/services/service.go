@@ -25,6 +25,11 @@ type Users interface {
 	CheckChatIDExists(ctx context.Context, telegramChatID int64) error
 }
 
+type Logger interface {
+	Info(msg string)
+	Error(err error)
+}
+
 type Services struct {
 	Categories
 	Notes
@@ -33,12 +38,13 @@ type Services struct {
 
 type Deps struct {
 	Repository *repository.Repository
+	Logger
 }
 
 func NewServices(deps Deps) *Services {
-	categories := NewCategoryService(deps.Repository.Categories)
-	notes := NewNoteService(deps.Repository.Notes)
-	users := NewUserService(deps.Repository.Users)
+	categories := NewCategoryService(deps.Logger, deps.Repository.Categories)
+	notes := NewNoteService(deps.Logger, deps.Repository.Notes)
+	users := NewUserService(deps.Logger, deps.Repository.Users)
 
 	return &Services{
 		Categories: categories,

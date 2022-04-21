@@ -2,33 +2,77 @@ package services
 
 import (
 	"context"
+	"errors"
 
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"github.com/arthurshafikov/tg-notebot/internal/repository"
 )
 
 type CategoryService struct {
-	repo repository.Categories
+	repo   repository.Categories
+	logger Logger
 }
 
-func NewCategoryService(repo repository.Categories) *CategoryService {
+func NewCategoryService(logger Logger, repo repository.Categories) *CategoryService {
 	return &CategoryService{
-		repo: repo,
+		repo:   repo,
+		logger: logger,
 	}
 }
 
 func (c *CategoryService) AddCategory(ctx context.Context, telegramChatID int64, name string) error {
-	return c.repo.AddCategory(ctx, telegramChatID, name)
+	if err := c.repo.AddCategory(ctx, telegramChatID, name); err != nil {
+		if !errors.Is(core.ErrCategoryExists, err) {
+			c.logger.Error(err)
+
+			return core.ErrServerError
+		}
+
+		return core.ErrCategoryExists
+	}
+
+	return nil
 }
 
 func (c *CategoryService) RemoveCategory(ctx context.Context, telegramChatID int64, name string) error {
-	return c.repo.RemoveCategory(ctx, telegramChatID, name)
+	if err := c.repo.RemoveCategory(ctx, telegramChatID, name); err != nil {
+		if !errors.Is(err, core.ErrNotFound) {
+			c.logger.Error(err)
+
+			return core.ErrServerError
+		}
+
+		return core.ErrNotFound
+	}
+
+	return nil
 }
 
 func (c *CategoryService) RenameCategory(ctx context.Context, telegramChatID int64, name, newName string) error {
-	return c.repo.RenameCategory(ctx, telegramChatID, name, newName)
+	if err := c.repo.RenameCategory(ctx, telegramChatID, name, newName); err != nil {
+		if !errors.Is(err, core.ErrNotFound) {
+			c.logger.Error(err)
+
+			return core.ErrServerError
+		}
+
+		return core.ErrNotFound
+	}
+
+	return nil
 }
 
 func (c *CategoryService) ListCategories(ctx context.Context, telegramChatID int64) ([]core.Category, error) {
-	return c.repo.ListCategories(ctx, telegramChatID)
+	categories, err := c.repo.ListCategories(ctx, telegramChatID)
+	if err != nil {
+		if !errors.Is(err, core.ErrNotFound) {
+			c.logger.Error(err)
+
+			return categories, core.ErrServerError
+		}
+
+		return categories, core.ErrNotFound
+	}
+
+	return categories, nil
 }
