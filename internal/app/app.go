@@ -25,6 +25,8 @@ func init() {
 }
 
 func Run() {
+	flag.Parse()
+
 	ctx := context.Background()
 	config := config.NewConfig(envPath, configFolderPath)
 
