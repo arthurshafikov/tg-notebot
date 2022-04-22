@@ -24,11 +24,11 @@ func (c *Category) AddCategory(ctx context.Context, telegramChatID int64, name s
 		bson.M{"telegram_chat_id": telegramChatID},
 		bson.M{"categories.name": name},
 	}}
-	if err := c.collection.FindOne(ctx, filter).Err(); err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return core.ErrCategoryExists
-		}
-
+	err := c.collection.FindOne(ctx, filter).Err()
+	if err == nil {
+		return core.ErrCategoryExists
+	}
+	if !errors.Is(err, mongo.ErrNoDocuments) {
 		return err
 	}
 
@@ -60,11 +60,11 @@ func (c *Category) RenameCategory(ctx context.Context, telegramChatID int64, nam
 		bson.M{"telegram_chat_id": telegramChatID},
 		bson.M{"categories.name": newName},
 	}}
-	if err := c.collection.FindOne(ctx, filter).Err(); err != nil {
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return core.ErrCategoryExists
-		}
-
+	err := c.collection.FindOne(ctx, filter).Err()
+	if err == nil {
+		return core.ErrCategoryExists
+	}
+	if !errors.Is(err, mongo.ErrNoDocuments) {
 		return err
 	}
 
@@ -74,7 +74,7 @@ func (c *Category) RenameCategory(ctx context.Context, telegramChatID int64, nam
 	}}
 	change := bson.M{"$set": bson.M{"categories.$.name": newName}}
 
-	err := c.collection.FindOneAndUpdate(ctx, match, change).Err()
+	err = c.collection.FindOneAndUpdate(ctx, match, change).Err()
 	if errors.Is(err, mongo.ErrNoDocuments) {
 		return core.ErrNotFound
 	}
