@@ -19,10 +19,6 @@ func NewLogger() *Logger {
 	}
 }
 
-func (l *Logger) Info(msg string) {
-	l.logrus.Info(msg)
-}
-
 func (l *Logger) Error(err error) {
 	l.logrus.Error(err)
 }

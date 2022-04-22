@@ -26,7 +26,6 @@ type Users interface {
 }
 
 type Logger interface {
-	Info(msg string)
 	Error(err error)
 }
 
