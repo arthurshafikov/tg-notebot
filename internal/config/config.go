@@ -28,12 +28,13 @@ type Messages struct {
 	NotAuthorized string
 	AuthSuccess   string
 
+	AddCategoryWrongSyntax    string
+	RenameCategoryWrongSyntax string
 	CategoryExists            string
 	CategoryNotFound          string
 	CategoryCreated           string
 	CategoryRemoved           string
 	CategoryRenamed           string
-	RenameCategoryWrongSyntax string
 	SelectCategories          string
 	ListCategories            string
 

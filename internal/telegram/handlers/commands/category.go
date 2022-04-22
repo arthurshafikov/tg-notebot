@@ -11,6 +11,9 @@ import (
 
 func (c *CommandHandler) HandleAddCategory(message *tgbotapi.Message) error {
 	categoryName := message.CommandArguments()
+	if categoryName == "" {
+		return fmt.Errorf(c.messages.AddCategoryWrongSyntax)
+	}
 
 	if err := c.services.Categories.AddCategory(c.ctx, message.Chat.ID, categoryName); err != nil {
 		if errors.Is(err, core.ErrCategoryExists) {
@@ -73,7 +76,7 @@ func (c *CommandHandler) HandleListCategories(message *tgbotapi.Message) error {
 
 	msgText := c.messages.ListCategories
 	for _, category := range categories {
-		msgText += fmt.Sprintf("\n - %s [%v]", category.Name, len(category.Notes))
+		msgText += fmt.Sprintf("\n - %s \\[%v]", category.Name, len(category.Notes))
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, msgText)
