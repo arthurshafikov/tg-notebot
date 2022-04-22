@@ -3,10 +3,8 @@ package core
 import "errors"
 
 var (
-	ErrNotFound          = errors.New("404 not found")
-	ErrServerError       = errors.New("500 server error")
-	ErrNothingWasDeleted = errors.New("nothing was deleted")
-	ErrNothingWasUpdated = errors.New("nothing was updated")
+	ErrNotFound    = errors.New("404 Not Found")
+	ErrServerError = errors.New("500 Server Error")
 
 	ErrCategoryExists = errors.New("category already exists")
 

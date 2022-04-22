@@ -42,7 +42,7 @@ func (n *Note) ListNotesFromCategory(
 
 	res := n.collection.FindOne(ctx, filter)
 	if err := res.Err(); err != nil {
-		if errors.Is(mongo.ErrNoDocuments, err) {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return notes, core.ErrNotFound
 		}
 
@@ -72,13 +72,10 @@ func (n *Note) RemoveNote(ctx context.Context, telegramChatID int64, categoryNam
 		"content": content,
 	}}}
 
-	if err := n.collection.FindOneAndUpdate(ctx, match, change).Err(); err != nil {
-		if errors.Is(mongo.ErrNoDocuments, err) {
-			return core.ErrNotFound
-		}
-
-		return err
+	err := n.collection.FindOneAndUpdate(ctx, match, change).Err()
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		return core.ErrNotFound
 	}
 
-	return nil
+	return err
 }

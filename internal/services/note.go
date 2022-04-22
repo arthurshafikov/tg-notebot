@@ -33,7 +33,7 @@ func (n *NoteService) AddNote(ctx context.Context, telegramChatID int64, categor
 func (n *NoteService) ListNotesFromCategory(ctx context.Context, telegramChatID int64, categoryName string) ([]core.Note, error) {
 	notes, err := n.repo.ListNotesFromCategory(ctx, telegramChatID, categoryName)
 	if err != nil {
-		if !errors.Is(core.ErrNotFound, err) {
+		if !errors.Is(err, core.ErrNotFound) {
 			n.logger.Error(err)
 
 			return notes, core.ErrServerError
@@ -47,7 +47,7 @@ func (n *NoteService) ListNotesFromCategory(ctx context.Context, telegramChatID 
 
 func (n *NoteService) RemoveNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
 	if err := n.repo.RemoveNote(ctx, telegramChatID, categoryName, content); err != nil {
-		if !errors.Is(core.ErrNotFound, err) {
+		if !errors.Is(err, core.ErrNotFound) {
 			n.logger.Error(err)
 
 			return core.ErrServerError

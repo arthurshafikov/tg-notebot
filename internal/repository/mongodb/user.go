@@ -44,7 +44,7 @@ func (u *User) CheckChatIDExists(ctx context.Context, telegramChatID int64) erro
 	filter := bson.M{"telegram_chat_id": telegramChatID}
 	res := u.collection.FindOne(ctx, filter)
 	if err := res.Err(); err != nil {
-		if errors.Is(mongo.ErrNoDocuments, err) {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return core.ErrNotFound
 		}
 

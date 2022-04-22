@@ -32,7 +32,7 @@ func (u *UserService) CreateIfNotExists(ctx context.Context, telegramChatID int6
 
 func (u *UserService) CheckChatIDExists(ctx context.Context, telegramChatID int64) error {
 	if err := u.repo.CheckChatIDExists(ctx, telegramChatID); err != nil {
-		if !errors.Is(core.ErrNotFound, err) {
+		if !errors.Is(err, core.ErrNotFound) {
 			u.logger.Error(err)
 
 			return core.ErrServerError

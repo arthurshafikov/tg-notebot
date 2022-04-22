@@ -22,7 +22,7 @@ func NewCategoryService(logger Logger, repo repository.Categories) *CategoryServ
 
 func (c *CategoryService) AddCategory(ctx context.Context, telegramChatID int64, name string) error {
 	if err := c.repo.AddCategory(ctx, telegramChatID, name); err != nil {
-		if !errors.Is(core.ErrCategoryExists, err) {
+		if !errors.Is(err, core.ErrCategoryExists) {
 			c.logger.Error(err)
 
 			return core.ErrServerError
