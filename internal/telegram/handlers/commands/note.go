@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/arthurshafikov/tg-notebot/internal/core"
@@ -16,6 +17,9 @@ func (c *CommandHandler) HandleAddNote(message *tgbotapi.Message) error {
 	categories, err := c.services.Categories.ListCategories(c.ctx, message.Chat.ID)
 	if err != nil {
 		return err
+	}
+	if len(categories) == 0 {
+		return errors.New(c.messages.NoCategories)
 	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryForNote)

@@ -12,6 +12,7 @@ Messages:
   CategoryRenamed: "Category *%s* was successfully renamed to *%s*"
   SelectCategories: "Select categories that you want to remove"
   ListCategories: "Here is your categories:"
+  NoCategories: "You have no categories at the moment, please use /addcategory *name*"
 
   SelectCategoryForNote: "Select in which category you want to put this note"
   SelectCategoryToRemoveNotes: "Select in which category you want to remove notes"

@@ -37,6 +37,7 @@ type Messages struct {
 	CategoryRenamed           string
 	SelectCategories          string
 	ListCategories            string
+	NoCategories              string
 
 	SelectCategoryForNote       string
 	SelectCategoryToRemoveNotes string
