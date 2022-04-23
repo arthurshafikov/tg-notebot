@@ -30,21 +30,6 @@ func (n *NoteService) AddNote(ctx context.Context, telegramChatID int64, categor
 	return nil
 }
 
-func (n *NoteService) ListNotesFromCategory(ctx context.Context, telegramChatID int64, categoryName string) ([]core.Note, error) {
-	notes, err := n.repo.ListNotesFromCategory(ctx, telegramChatID, categoryName)
-	if err != nil {
-		if !errors.Is(err, core.ErrNotFound) {
-			n.logger.Error(err)
-
-			return notes, core.ErrServerError
-		}
-
-		return notes, core.ErrNotFound
-	}
-
-	return notes, nil
-}
-
 func (n *NoteService) RemoveNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
 	if err := n.repo.RemoveNote(ctx, telegramChatID, categoryName, content); err != nil {
 		if !errors.Is(err, core.ErrNotFound) {
@@ -57,4 +42,23 @@ func (n *NoteService) RemoveNote(ctx context.Context, telegramChatID int64, cate
 	}
 
 	return nil
+}
+
+func (n *NoteService) ListNotesFromCategory(
+	ctx context.Context,
+	telegramChatID int64,
+	categoryName string,
+) ([]core.Note, error) {
+	notes, err := n.repo.ListNotesFromCategory(ctx, telegramChatID, categoryName)
+	if err != nil {
+		if !errors.Is(err, core.ErrNotFound) {
+			n.logger.Error(err)
+
+			return notes, core.ErrServerError
+		}
+
+		return notes, core.ErrNotFound
+	}
+
+	return notes, nil
 }
