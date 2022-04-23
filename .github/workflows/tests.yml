@@ -6,19 +6,19 @@ env:
   GO111MODULE: "on"
 
 jobs:
-  go_get:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+    - uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.18
-
-      - name: go get
-        run: cd /tmp && go get -v "github.com/${GITHUB_REPOSITORY}@${BRANCH}"
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.18.0-beta1
+        stable: false
+  
+    - name: Build
+      run: make build
 
   lint:
     runs-on: ubuntu-latest
