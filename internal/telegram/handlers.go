@@ -7,7 +7,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
+func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 	switch message.Command() {
 	case core.StartCommand:
 		return b.commandHandler.HandleStart(message)
@@ -34,11 +34,11 @@ func (b *TelegramBot) handleCommand(message *tgbotapi.Message) error {
 	return nil
 }
 
-func (b *TelegramBot) handleMessage(message *tgbotapi.Message) error {
+func (b *Bot) handleMessage(message *tgbotapi.Message) error {
 	return b.commandHandler.HandleAddNote(message)
 }
 
-func (b *TelegramBot) handleCallbackQuery(query *tgbotapi.CallbackQuery) error {
+func (b *Bot) handleCallbackQuery(query *tgbotapi.CallbackQuery) error {
 	splittedData := strings.Split(query.Data, " ")
 	if len(splittedData) < 2 {
 		return core.ErrWrongCallbackQueryData

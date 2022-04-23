@@ -13,7 +13,7 @@ const (
 	ListNotes          = "listnotes"
 	ListAllNotes       = "listallnotes"
 
-	// CallbackQuery
+	// CallbackQuery.
 	RemoveNotesChooseCategoryCallbackQuery = "removenoteschoosecategory"
 	ListNotesChooseCategoryCallbackQuery   = "listnoteschoosecategory"
 )

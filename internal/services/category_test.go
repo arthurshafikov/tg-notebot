@@ -12,9 +12,9 @@ import (
 )
 
 var (
-	telegramChatID  int64  = int64(20)
-	categoryName    string = "newCategoryName"
-	categoryNewName string = "categoryNewName"
+	telegramChatID  = int64(20)
+	categoryName    = "newCategoryName"
+	categoryNewName = "categoryNewName"
 )
 
 func getCategoryRepositoryAndLogger(

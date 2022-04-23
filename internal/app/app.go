@@ -30,7 +30,7 @@ func Run() {
 	ctx := context.Background()
 	config := config.NewConfig(envPath, configFolderPath)
 
-	botApi, err := tgbotapi.NewBotAPI(config.TelegramBotConfig.APIKey)
+	botAPI, err := tgbotapi.NewBotAPI(config.TelegramBotConfig.APIKey)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,7 +53,7 @@ func Run() {
 		Logger:     logger,
 	})
 
-	telegramBot := telegram.NewTelegramBot(ctx, botApi, services, config.Messages)
+	telegramBot := telegram.NewBot(ctx, botAPI, services, config.Messages)
 
 	if err := telegramBot.Start(); err != nil {
 		log.Fatalln(err)

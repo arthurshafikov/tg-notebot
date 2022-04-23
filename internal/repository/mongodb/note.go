@@ -20,9 +20,11 @@ func NewNote(db *mongo.Client) *Note {
 }
 
 func (n *Note) AddNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
-	match := bson.M{"$and": []interface{}{
-		bson.M{"telegram_chat_id": telegramChatID},
-		bson.M{"categories.name": categoryName}},
+	match := bson.M{
+		"$and": []interface{}{
+			bson.M{"telegram_chat_id": telegramChatID},
+			bson.M{"categories.name": categoryName},
+		},
 	}
 	change := bson.M{"$push": bson.M{"categories.$.notes": core.Note{
 		Content: content,
@@ -64,9 +66,11 @@ func (n *Note) ListNotesFromCategory(
 }
 
 func (n *Note) RemoveNote(ctx context.Context, telegramChatID int64, categoryName, content string) error {
-	match := bson.M{"$and": []interface{}{
-		bson.M{"telegram_chat_id": telegramChatID},
-		bson.M{"categories.name": categoryName}},
+	match := bson.M{
+		"$and": []interface{}{
+			bson.M{"telegram_chat_id": telegramChatID},
+			bson.M{"categories.name": categoryName},
+		},
 	}
 	change := bson.M{"$pull": bson.M{"categories.$.notes": bson.M{
 		"content": content,

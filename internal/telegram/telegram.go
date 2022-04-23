@@ -11,7 +11,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-type TelegramBot struct {
+type Bot struct {
 	ctx      context.Context
 	bot      *tgbotapi.BotAPI
 	services *services.Services
@@ -22,16 +22,16 @@ type TelegramBot struct {
 	messages config.Messages
 }
 
-func NewTelegramBot(
+func NewBot(
 	ctx context.Context,
 	bot *tgbotapi.BotAPI,
 	services *services.Services,
 	messages config.Messages,
-) *TelegramBot {
+) *Bot {
 	commandHandler := commands.NewCommandHandler(ctx, bot, services, messages)
 	queryHandler := queries.NewQueryHandler(ctx, bot, services, messages)
 
-	return &TelegramBot{
+	return &Bot{
 		ctx:      ctx,
 		bot:      bot,
 		services: services,
@@ -43,7 +43,7 @@ func NewTelegramBot(
 	}
 }
 
-func (b *TelegramBot) Start() error {
+func (b *Bot) Start() error {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
@@ -54,7 +54,7 @@ func (b *TelegramBot) Start() error {
 
 	var chatID int64
 	for update := range updates {
-		if update.Message != nil {
+		if update.Message != nil { //nolint
 			chatID = update.Message.Chat.ID
 		} else if update.CallbackQuery != nil {
 			chatID = update.CallbackQuery.Message.Chat.ID
