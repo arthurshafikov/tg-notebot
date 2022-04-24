@@ -13,10 +13,7 @@ func (q *QueryHandler) HandleAddNote(telegramChatID int64, args []string) error 
 		return core.ErrServerError
 	}
 
-	categoryName := args[0]
-	noteContent := strings.Join(args[1:], " ")
-
-	if err := q.services.Notes.AddNote(q.ctx, telegramChatID, categoryName, noteContent); err != nil {
+	if err := q.services.Notes.AddNote(q.ctx, telegramChatID, args[0], args[1]); err != nil {
 		return err
 	}
 
@@ -60,10 +57,7 @@ func (q *QueryHandler) HandleRemoveNotes(telegramChatID int64, args []string) er
 		return core.ErrServerError
 	}
 
-	categoryName := args[0]
-	noteContent := strings.Join(args[1:], " ")
-
-	if err := q.services.Notes.RemoveNote(q.ctx, telegramChatID, categoryName, noteContent); err != nil {
+	if err := q.services.Notes.RemoveNote(q.ctx, telegramChatID, args[0], args[1]); err != nil {
 		return err
 	}
 
