@@ -18,10 +18,10 @@ test:
 .PHONY: build test
 
 up:
-	docker-compose -f ${DOCKER_COMPOSE_FILE} -p ${APP_NAME} up --build
+	docker-compose --env-file ./app.env -f ${DOCKER_COMPOSE_FILE} -p ${APP_NAME} up --build -d
 
 down:
-	docker-compose -f ${DOCKER_COMPOSE_FILE} down --volumes
+	docker-compose --env-file ./app.env -f ${DOCKER_COMPOSE_FILE} -p ${APP_NAME} down --volumes
 
 mocks:
 	mockgen -source=./internal/repository/repository.go -destination ./internal/repository/mocks/mock.go
