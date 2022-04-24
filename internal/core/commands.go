@@ -16,4 +16,5 @@ const (
 	// CallbackQuery.
 	RemoveNotesChooseCategoryCallbackQuery = "removenoteschoosecategory"
 	ListNotesChooseCategoryCallbackQuery   = "listnoteschoosecategory"
+	SpecialDelimeterInQueryCallback        = "_#_"
 )

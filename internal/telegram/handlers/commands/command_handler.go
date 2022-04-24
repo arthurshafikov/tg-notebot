@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"strings"
 
 	"github.com/arthurshafikov/tg-notebot/internal/config"
 	"github.com/arthurshafikov/tg-notebot/internal/core"
@@ -43,12 +44,13 @@ func (c *CommandHandler) HandleStart(message *tgbotapi.Message) error {
 
 func (c *CommandHandler) getKeyboardCategories(
 	categories []core.Category,
-	callable func(category core.Category) (string, string),
+	callable func(category core.Category) []string,
 ) tgbotapi.InlineKeyboardMarkup {
 	keyboard := tgbotapi.InlineKeyboardMarkup{}
 	for _, category := range categories {
 		var row []tgbotapi.InlineKeyboardButton
-		btn := tgbotapi.NewInlineKeyboardButtonData(callable(category))
+		data := strings.Join(callable(category), core.SpecialDelimeterInQueryCallback)
+		btn := tgbotapi.NewInlineKeyboardButtonData(category.Name, data)
 		row = append(row, btn)
 		keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
 	}

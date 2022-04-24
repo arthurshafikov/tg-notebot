@@ -39,7 +39,7 @@ func (b *Bot) handleMessage(message *tgbotapi.Message) error {
 }
 
 func (b *Bot) handleCallbackQuery(query *tgbotapi.CallbackQuery) error {
-	splittedData := strings.Split(query.Data, " ")
+	splittedData := strings.Split(query.Data, core.SpecialDelimeterInQueryCallback)
 	if len(splittedData) < 2 {
 		return core.ErrWrongCallbackQueryData
 	}

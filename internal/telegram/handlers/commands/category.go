@@ -35,8 +35,8 @@ func (c *CommandHandler) HandleRemoveCategory(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategories)
 
-	keyboard := c.getKeyboardCategories(categories, func(category core.Category) (string, string) {
-		return category.Name, fmt.Sprintf("%s %s", core.RemoveCategoryCommand, category.Name)
+	keyboard := c.getKeyboardCategories(categories, func(category core.Category) []string {
+		return []string{core.RemoveCategoryCommand, category.Name}
 	})
 
 	msg.ReplyMarkup = keyboard

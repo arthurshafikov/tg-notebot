@@ -24,8 +24,8 @@ func (c *CommandHandler) HandleAddNote(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryForNote)
 
-	keyboard := c.getKeyboardCategories(categories, func(category core.Category) (string, string) {
-		return category.Name, fmt.Sprintf("%s %s %s", core.AddNoteCommand, category.Name, noteContent)
+	keyboard := c.getKeyboardCategories(categories, func(category core.Category) []string {
+		return []string{core.AddNoteCommand, category.Name, noteContent}
 	})
 
 	msg.ReplyMarkup = keyboard
@@ -41,8 +41,8 @@ func (c *CommandHandler) HandleRemoveNotes(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToRemoveNotes)
 
-	keyboard := c.getKeyboardCategories(categories, func(category core.Category) (string, string) {
-		return category.Name, fmt.Sprintf("%s %s", core.RemoveNotesChooseCategoryCallbackQuery, category.Name)
+	keyboard := c.getKeyboardCategories(categories, func(category core.Category) []string {
+		return []string{core.RemoveNotesChooseCategoryCallbackQuery, category.Name}
 	})
 
 	msg.ReplyMarkup = keyboard
@@ -58,8 +58,8 @@ func (c *CommandHandler) HandleListNotes(message *tgbotapi.Message) error {
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToListNotes)
 
-	keyboard := c.getKeyboardCategories(categories, func(category core.Category) (string, string) {
-		return category.Name, fmt.Sprintf("%s %s", core.ListNotesChooseCategoryCallbackQuery, category.Name)
+	keyboard := c.getKeyboardCategories(categories, func(category core.Category) []string {
+		return []string{core.ListNotesChooseCategoryCallbackQuery, category.Name}
 	})
 
 	msg.ReplyMarkup = keyboard
