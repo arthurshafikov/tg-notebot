@@ -37,6 +37,17 @@ func TestAddCategory(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func TestAddCategoryWithEqualsSign(t *testing.T) {
+	ctx, repo, logger := getCategoryRepositoryAndLogger(t)
+	gomock.InOrder(
+		repo.EXPECT().AddCategory(ctx, telegramChatID, categoryName).Times(0).Return(nil),
+	)
+	service := NewCategoryService(logger, repo)
+
+	err := service.AddCategory(ctx, telegramChatID, "category=SomeInvalid=")
+	require.ErrorIs(t, err, core.ErrInvalidateCategoryName)
+}
+
 func TestAddCategoryCausedServerError(t *testing.T) {
 	ctx, repo, logger := getCategoryRepositoryAndLogger(t)
 	gomock.InOrder(

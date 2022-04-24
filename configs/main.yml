@@ -4,7 +4,7 @@ Messages:
   AuthSuccess: "Successfully authorized!"
 
   AddCategoryWrongSyntax: "Please use the given syntax: /addcategory *name*"
-  RenameCategoryWrongSyntax: "Please use the given syntax: /renamecategory _oldName newName_"
+  RenameCategoryWrongSyntax: "Please use the given syntax: /renamecategory _oldName=newName_"
   CategoryExists: "The category *%s* already exists!"
   CategoryNotFound: "The category *%s* was not found!"
   CategoryCreated: "Category *%s* was created successfully!"
@@ -13,6 +13,7 @@ Messages:
   SelectCategories: "Select categories that you want to remove"
   ListCategories: "Here is your categories:"
   NoCategories: "You have no categories at the moment, please use /addcategory *name*"
+  InvalidateCategoryName: "Category name can't have the '=' symbol"
 
   SelectCategoryForNote: "Select in which category you want to put this note"
   SelectCategoryToRemoveNotes: "Select in which category you want to remove notes"

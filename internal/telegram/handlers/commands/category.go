@@ -19,6 +19,9 @@ func (c *CommandHandler) HandleAddCategory(message *tgbotapi.Message) error {
 		if errors.Is(err, core.ErrCategoryExists) {
 			return fmt.Errorf(c.messages.CategoryExists, categoryName)
 		}
+		if errors.Is(err, core.ErrInvalidateCategoryName) {
+			return fmt.Errorf(c.messages.InvalidateCategoryName)
+		}
 		return err
 	}
 
@@ -45,7 +48,7 @@ func (c *CommandHandler) HandleRemoveCategory(message *tgbotapi.Message) error {
 }
 
 func (c *CommandHandler) HandleRenameCategory(message *tgbotapi.Message) error {
-	args := strings.Split(message.CommandArguments(), " ")
+	args := strings.Split(message.CommandArguments(), "=")
 	if len(args) != 2 {
 		return fmt.Errorf(c.messages.RenameCategoryWrongSyntax)
 	}

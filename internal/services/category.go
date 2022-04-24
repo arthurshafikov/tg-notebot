@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"strings"
 
 	"github.com/arthurshafikov/tg-notebot/internal/core"
 	"github.com/arthurshafikov/tg-notebot/internal/repository"
@@ -21,6 +22,9 @@ func NewCategoryService(logger Logger, repo repository.Categories) *CategoryServ
 }
 
 func (c *CategoryService) AddCategory(ctx context.Context, telegramChatID int64, name string) error {
+	if strings.Contains(name, "=") {
+		return core.ErrInvalidateCategoryName
+	}
 	if err := c.repo.AddCategory(ctx, telegramChatID, name); err != nil {
 		if !errors.Is(err, core.ErrCategoryExists) {
 			c.logger.Error(err)

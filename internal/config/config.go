@@ -38,6 +38,7 @@ type Messages struct {
 	SelectCategories          string
 	ListCategories            string
 	NoCategories              string
+	InvalidateCategoryName    string
 
 	SelectCategoryForNote       string
 	SelectCategoryToRemoveNotes string
