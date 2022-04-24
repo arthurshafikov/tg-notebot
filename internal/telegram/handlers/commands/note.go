@@ -38,6 +38,9 @@ func (c *CommandHandler) HandleRemoveNotes(message *tgbotapi.Message) error {
 	if err != nil {
 		return err
 	}
+	if len(categories) == 0 {
+		return fmt.Errorf(c.messages.NoCategories)
+	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToRemoveNotes)
 
@@ -55,6 +58,9 @@ func (c *CommandHandler) HandleListNotes(message *tgbotapi.Message) error {
 	if err != nil {
 		return err
 	}
+	if len(categories) == 0 {
+		return fmt.Errorf(c.messages.NoCategories)
+	}
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, c.messages.SelectCategoryToListNotes)
 
@@ -71,6 +77,9 @@ func (c *CommandHandler) HandleListAllNotes(message *tgbotapi.Message) error {
 	categories, err := c.services.Categories.ListCategories(c.ctx, message.Chat.ID)
 	if err != nil {
 		return err
+	}
+	if len(categories) == 0 {
+		return fmt.Errorf(c.messages.NoCategories)
 	}
 
 	msgText := c.messages.ListNotes

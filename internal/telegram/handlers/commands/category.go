@@ -76,6 +76,9 @@ func (c *CommandHandler) HandleListCategories(message *tgbotapi.Message) error {
 	if err != nil {
 		return err
 	}
+	if len(categories) == 0 {
+		return fmt.Errorf(c.messages.NoCategories)
+	}
 
 	msgText := c.messages.ListCategories
 	for _, category := range categories {
