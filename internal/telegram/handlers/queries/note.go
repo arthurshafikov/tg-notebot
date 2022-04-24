@@ -38,10 +38,11 @@ func (q *QueryHandler) HandleListNotesToRemoveInCategory(telegramChatID int64, c
 		keyboard := tgbotapi.InlineKeyboardMarkup{}
 		for _, note := range notes {
 			var row []tgbotapi.InlineKeyboardButton
-			btn := tgbotapi.NewInlineKeyboardButtonData(
-				note.Content,
-				fmt.Sprintf("%s %s %s", core.RemoveNotesCommand, categoryName, note.Content),
+			data := strings.Join(
+				[]string{core.RemoveNotesCommand, categoryName, note.Content},
+				core.SpecialDelimeterInQueryCallback,
 			)
+			btn := tgbotapi.NewInlineKeyboardButtonData(note.Content, data)
 			row = append(row, btn)
 			keyboard.InlineKeyboard = append(keyboard.InlineKeyboard, row)
 		}
