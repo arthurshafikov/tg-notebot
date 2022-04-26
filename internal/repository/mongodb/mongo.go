@@ -11,7 +11,6 @@ import (
 
 type Config struct {
 	Host     string
-	Port     string
 	Username string
 	Password string
 }
@@ -20,8 +19,8 @@ func NewMongoDB(ctx context.Context, config Config) (*mongo.Client, error) {
 	client, err := mongo.Connect(
 		ctx,
 		options.Client().ApplyURI(
-			fmt.Sprintf("mongodb://%s:%s", config.Host, config.Port),
-		).SetAuth(options.Credential{Username: config.Username, Password: config.Password}),
+			fmt.Sprintf("mongodb+srv://%s:%s@%s", config.Username, config.Password, config.Host),
+		),
 	)
 	if err != nil {
 		return nil, err
