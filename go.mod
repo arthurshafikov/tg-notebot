@@ -1,6 +1,6 @@
-// +heroku goVersion 1.18
-
 module github.com/arthurshafikov/tg-notebot
+
+// +heroku goVersion 1.18
 
 go 1.18
 
