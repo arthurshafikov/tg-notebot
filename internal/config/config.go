@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"os"
 
 	"github.com/spf13/viper"
 )
@@ -18,7 +19,6 @@ type TelegramBotConfig struct {
 
 type DatabaseConfig struct {
 	Host     string `mapstructure:"MONGODB_HOST"`
-	Port     string `mapstructure:"MONGODB_PORT"`
 	Username string `mapstructure:"MONGODB_USER"`
 	Password string `mapstructure:"MONGODB_PASSWORD"`
 }
@@ -65,16 +65,30 @@ func NewConfig(envPath, configFolder string) *Config {
 		log.Fatalln(err)
 	}
 
-	// Read from env
+	if envPath == "" {
+		config.readEnvVarsFromSystem()
+	} else {
+		config.readEnvVarsFromFile(envPath)
+	}
+
+	return &config
+}
+
+func (c *Config) readEnvVarsFromFile(envPath string) {
 	viper.AddConfigPath(envPath)
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalln(err)
 	}
-	if err := viper.Unmarshal(&config); err != nil {
+	if err := viper.Unmarshal(c); err != nil {
 		log.Fatalln(err)
 	}
+}
 
-	return &config
+func (c *Config) readEnvVarsFromSystem() {
+	c.DatabaseConfig.Host = os.Getenv("MONGODB_HOST")
+	c.DatabaseConfig.Username = os.Getenv("MONGODB_USER")
+	c.DatabaseConfig.Password = os.Getenv("MONGODB_PASSWORD")
+	c.TelegramBotConfig.APIKey = os.Getenv("BOT_API_KEY")
 }
