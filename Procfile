@@ -1,1 +1,1 @@
-worker: ./bin/app --env ""
+worker: ./bin/app -cfgFolder ./configs

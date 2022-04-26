@@ -20,8 +20,8 @@ var (
 )
 
 func init() {
-	flag.StringVar(&envPath, "env", "./", "Path to .env file folder")
-	flag.StringVar(&configFolderPath, "cfgFolder", "./configs", "Path to configs folder")
+	flag.StringVar(&envPath, "env", "", "Path to .env file folder")
+	flag.StringVar(&configFolderPath, "cfgFolder", "", "Path to configs folder")
 }
 
 func Run() {
