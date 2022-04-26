@@ -18,6 +18,7 @@ type TelegramBotConfig struct {
 }
 
 type DatabaseConfig struct {
+	Scheme   string `mapstructure:"MONGODB_SCHEME"`
 	Host     string `mapstructure:"MONGODB_HOST"`
 	Username string `mapstructure:"MONGODB_USER"`
 	Password string `mapstructure:"MONGODB_PASSWORD"`
@@ -87,6 +88,7 @@ func (c *Config) readEnvVarsFromFile(envPath string) {
 }
 
 func (c *Config) readEnvVarsFromSystem() {
+	c.DatabaseConfig.Scheme = os.Getenv("MONGODB_SCHEME")
 	c.DatabaseConfig.Host = os.Getenv("MONGODB_HOST")
 	c.DatabaseConfig.Username = os.Getenv("MONGODB_USER")
 	c.DatabaseConfig.Password = os.Getenv("MONGODB_PASSWORD")

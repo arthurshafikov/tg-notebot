@@ -36,6 +36,7 @@ func Run() {
 	}
 
 	mongo, err := mongodb.NewMongoDB(ctx, mongodb.Config{
+		Scheme:   config.DatabaseConfig.Scheme,
 		Host:     config.DatabaseConfig.Host,
 		Username: config.DatabaseConfig.Username,
 		Password: config.DatabaseConfig.Password,
